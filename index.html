@@ -1,54 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Alpina Market</title>
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    
-    <!-- Шапка (хедер) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
     <header class="header">
-        <div class="container">
-            <div class="header__inner">
-                <nav class="nav">
-                    <a href="#">Главная</a>
-                    <a href="#">Каталог</a>
-                    <a href="#">О нас</a>
-                    <a href="#">Контакты</a>
-                </nav>
-                <div class="header__actions">
-                    <span class="city">Санкт-Петербург</span>
-                    <a href="tel:88007004024" class="phone">8 800 700 40 24</a>
-                    <button class="btn-call">Позвонить или написать</button>
-                </div>
-            </div>
-        </div>
-    </header>
+      <div class="header__top">
+        <div class="container header__top-inner">
+          <button class="header__city" type="button">
+            Санкт-Петербург
+            <!-- <span class="header__chevron" aria-hidden="true"></span> -->
+            <img class="header__chevron" src="assets/icons/chevron.svg" alt="chevron">
+          </button>
 
+          <nav class="header__top-nav" aria-label="Верхнее меню">
+            <a class="header__top-link" href="#">О нас</a>
+            <a class="header__top-link" href="#">Наши салоны</a>
+            <a class="header__top-link" href="#">Оплата и доставка</a>
+            <a class="header__top-link" href="#">Для бизнеса</a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="header__main">
+        <div class="container header__main-inner">
+          <a class="header__logo" href="#" aria-label="Alpina Market">
+            <img src="assets/images/logo.svg" alt="alpina market" />
+          </a>
+
+          <form class="header__search" role="search">
+            <input class="header__search-input" type="search" name="q" placeholder="Белый стул" />
+            <button class="header__search-btn" type="submit" aria-label="Поиск">
+                <img src="assets/icons/search.svg" alt="Поиск">
+            </button>
+          </form>
+
+          <div class="header__contacts">
+            <a class="header__phone" href="tel:+78007004024">8 800 700 40 24</a>
+            <button class="header__callback" type="button">
+              Позвонить или написать
+              <img class="header__chevron" src="assets/icons/chevron.svg" alt="chevron">
+            </button>
+          </div>
+
+          <div class="header__actions" aria-label="Действия">
+            <a class="header__action" href="#" aria-label="Профиль">
+              <img width="18" height="18" src="assets/icons/user.svg" alt="" />
+            </a>
+            <a class="header__action" href="#" aria-label="Сообщения">
+              <img width="18" height="18" src="assets/icons/message.svg" alt="" />
+            </a>
+            <a class="header__action" href="#" aria-label="Избранное">
+              <img width="20" height="16" src="assets/icons/fav.svg" alt="" />
+            </a>
+            <a class="header__action" href="#" aria-label="Корзина">
+              <img width="14" height="18" src="assets/icons/cart.svg" alt="" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="header__bottom">
+        <div class="container header__bottom-inner">
+          <nav class="header__menu" aria-label="Каталог">
+            <a class="header__menu-link header__menu-link--catalog " href="#">Каталог</a>
+            <a class="header__menu-link" href="#">Каталог по комнатам</a>
+            <a class="header__menu-link" href="#">Дизайн-проекты</a>
+            <a class="header__menu-link" href="#">Мебель на заказ</a>
+          </nav>
+
+          <nav class="header__submenu" aria-label="Разделы каталога">
+            <a class="header__submenu-link" href="#">Мебель</a>
+            <a class="header__submenu-link" href="#">Мебельная фурнитура и комплектующие</a>
+            <a class="header__submenu-link" href="#">Товары для дома</a>
+            <a class="header__submenu-link" href="#">Плитка, керамогранит и мозаика</a>
+            <a class="header__submenu-link" href="#">Акции</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+  
     <!-- Основной контент -->
     <main>
-        <!-- Секция с новогодним баннером -->
-        <section class="hero">
-            <div class="container">
-                <h1>Новый год и новогодний праздник! <br> С Новым Годом и Новогодним Днём!</h1>
-            </div>
-        </section>
-
-        <!-- Товары -->
-        <section class="products">
-            <div class="container">
-                <h2>Белый стул</h2>
-                <!-- Пиксель-эффект будет здесь -->
-                <div id="pixel-effect" class="pixel-container">
-                    <!-- Сюда позже добавим js логику -->
-                </div>
-            </div>
-        </section>
+      <section class="hero" aria-label="Hero">
+        <img class="hero__image" src="assets/images/hero.png" alt="" />
+      </section>
     </main>
 
     <script src="js/script.js"></script>
-</body>
+  </body>
 </html>
