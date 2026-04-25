@@ -296,7 +296,7 @@
  /* BIZ */
 
  .biz {
-    margin-bottom: 56px;
+    margin-bottom: 87px;
  }
 
  .biz__inner {
@@ -325,4 +325,144 @@
    margin-top: 3px;
    font-size: 15px;
    letter-spacing: 0.45px;
+ }
+
+ /* OFFERS */
+
+ .offers {
+   padding-bottom: 86px;
+ }
+
+ .offers__grid {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   row-gap: 24px;   
+  column-gap: 16px; 
+ }
+
+ .offer-card {
+   max-height: 450px;
+ }
+
+ .offer-card__inner {
+    background: #f6f6f6;
+    position: relative;
+ }
+
+ /* .offer-card__head {
+   display: flex;
+   align-items: flex-start;
+   justify-content: space-between;
+   margin-bottom: 10px;
+ } */
+
+ .offer-card__badge {
+   width: 74px;
+   height: 24px;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 4px;
+   background: #000000;
+   color: #ffffff;
+   font-size: 8px;
+   letter-spacing: 1.8px;
+   position: absolute;
+   top: 4px;
+   left: 4px;
+   z-index: 5;
+ }
+
+ .offer-card__fav {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   position: absolute;
+   top: 9px;
+   right: 9px;
+   z-index: 5;
+ }
+
+ .offer-card__image {
+   height: 320px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ }
+
+ .offer-card__image img {
+   display: block;
+   max-width: 100%;
+   max-height: 100%;
+ }
+
+ .offer-card__content {
+   padding-top: 16px;
+   display: grid;
+   gap: 12px;
+ }
+
+ .offer-card__row {
+   display: grid;
+   grid-template-columns: 1fr auto;
+ }
+
+ .offer-card__title {
+   max-width: 230px;
+   letter-spacing: 0.6px;
+ }
+
+ .offer-card__price {
+   white-space: nowrap;
+   letter-spacing: 0.4px;
+ }
+
+ .offer-card__sizes {
+   font-size: 8px;
+   letter-spacing: 1.4px;
+ }
+
+ .offer-card__bottom {
+   display: flex;
+   align-items: flex-end;
+   justify-content: space-between;
+ }
+
+ .offer-card__thumbs {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+ }
+
+ .offer-card__thumb {
+   width: 32px;
+   height: 32px;
+   background: #ffffff;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ }
+
+ .offer-card__thumb img {
+   display: block;
+   width: 100%;
+   height: 100%;
+ }
+
+ .offer-card__more {
+   width: 32px;
+   height: 32px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 10px;
+   border: 1px solid rgba(0, 0, 0, 0.12);
+ }
+
+ .offer-card__cart {
+   width: 26px;
+   height: 26px;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
  }

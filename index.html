@@ -32,7 +32,7 @@
       <div class="header__main">
         <div class="container header__main-inner">
           <a class="header__logo" href="#" aria-label="Alpina Market">
-            <img src="assets/images/logo.svg" alt="alpina market" />
+            <img src="assets/logo.svg" alt="alpina market" />
           </a>
 
           <form class="header__search" role="search">
@@ -90,7 +90,7 @@
     <!-- Основной контент -->
     <main>
       <section class="hero" aria-label="Hero">
-        <img class="hero__image" src="assets/images/hero.png" alt="" />
+        <img class="hero__image" src="assets/hero/hero.png" alt="" />
       </section>
 
       <section class="rooms" aria-label="Каталог по комнатам">
@@ -186,8 +186,19 @@
           </div>
         </div>
       </section>
+
+      <section class="offers" aria-label="Лучшее предложение">
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-head__title">Лучшее предложение</h2>
+            <a class="section-head__link" href="#">Все предложения</a>
+          </div>
+
+          <div class="offers__grid" id="offersGrid"></div>
+        </div>
+      </section>
     </main>
 
-    <script src="js/script.js"></script>
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
