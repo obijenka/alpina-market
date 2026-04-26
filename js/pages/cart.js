@@ -1,10 +1,12 @@
 import { OFFERS } from "../data/offers.js";
 import { initAuthModal, openAuthModal } from "../auth/authModal.js";
 import {
+  addOrder,
   clearCart,
   getCurrentUser,
   getCartItems,
   getSession,
+  migrateGuestOrdersToUser,
   migrateGuestWishlistAndCartToUser,
   removeOfferFromCart,
   updateCartOfferQty,
@@ -255,7 +257,18 @@ function initCheckout() {
       const address = String(fd.get("address") ?? "").trim();
       if (!name || !phone || !address) return;
 
-      void total;
+      addOrder({
+        items: items.map((i) => ({
+          offerId: i.offerId,
+          qty: i.qty,
+          title: i.title,
+          image: i.image,
+          price: i.priceNumber,
+        })),
+        total,
+        customer: { name, phone, address },
+      });
+
       clearCart();
       form.reset();
       closeCheckoutModal();
@@ -283,6 +296,7 @@ function initHeaderActions() {
 
   document.addEventListener("alpina:session-changed", () => {
     migrateGuestWishlistAndCartToUser();
+    migrateGuestOrdersToUser();
     renderCart();
   });
 }

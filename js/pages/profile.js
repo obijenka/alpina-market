@@ -4,6 +4,7 @@ import {
   clearSession,
   getCurrentUser,
   getCurrentUserAddresses,
+  getOrders,
   getSession,
   removeCurrentUserAddress,
   setCurrentUserDefaultAddress,
@@ -12,6 +13,96 @@ import {
 
 function $(selector) {
   return document.querySelector(selector);
+}
+
+function formatDateTime(iso) {
+  const d = new Date(String(iso));
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString("ru-RU", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function formatRub(value) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return "0 руб.";
+  return `${num.toLocaleString("ru-RU")} руб.`;
+}
+
+function getStatusLabel(status) {
+  const s = String(status);
+  if (s === "done") return "Выполнен";
+  if (s === "canceled") return "Отменён";
+  return "Текущий";
+}
+
+function renderOrders({ status }) {
+  const list = $("#ordersList");
+  const meta = $("#ordersMeta");
+  if (!list) return;
+
+  const orders = getOrders();
+  const filtered = orders.filter((o) => String(o.status) === String(status));
+
+  if (meta) meta.textContent = orders.length ? `${orders.length}` : "";
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="profile-address__text">Заказов пока нет</div>';
+    return;
+  }
+
+  list.innerHTML = filtered
+    .map((o) => {
+      const itemsText = Array.isArray(o.items)
+        ? o.items
+            .map((i) => `${i.title || "Товар"} × ${i.qty}`)
+            .filter(Boolean)
+            .slice(0, 3)
+            .join("<br />")
+        : "";
+
+      const moreCount = Array.isArray(o.items) && o.items.length > 3 ? o.items.length - 3 : 0;
+      const more = moreCount > 0 ? `<div class="order-card__items">+ ещё ${moreCount}</div>` : "";
+
+      return `
+        <div class="order-card" data-order-id="${escapeHtml(o.id)}">
+          <div class="order-card__top">
+            <div class="order-card__title">Заказ №${escapeHtml(o.id.slice(0, 6))}</div>
+          </div>
+          <div class="order-card__meta">Дата: ${escapeHtml(formatDateTime(o.createdAt))}</div>
+          <div class="order-card__meta">Сумма: ${escapeHtml(formatRub(o.total))}</div>
+          <div class="order-card__items">${itemsText || ""}</div>
+          ${more}
+        </div>
+      `.trim();
+    })
+    .join("");
+}
+
+function initOrdersTabs() {
+  const tabs = document.querySelectorAll("[data-orders-tab]");
+  if (tabs.length === 0) return;
+
+  let active = "current";
+  const setActive = (next) => {
+    active = next;
+    tabs.forEach((t) => t.classList.toggle("is-active", t.getAttribute("data-orders-tab") === next));
+    renderOrders({ status: active });
+  };
+
+  tabs.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const next = btn.getAttribute("data-orders-tab");
+      if (!next) return;
+      setActive(next);
+    });
+  });
+
+  setActive(active);
 }
 
 function setSaved(labelEl) {
@@ -285,6 +376,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (authed) {
     fillProfileForm();
     renderAddresses();
+    initOrdersTabs();
   }
 
   document.addEventListener("alpina:session-changed", () => {
@@ -292,6 +384,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isAuthed) {
       fillProfileForm();
       renderAddresses();
+      initOrdersTabs();
     }
   });
 

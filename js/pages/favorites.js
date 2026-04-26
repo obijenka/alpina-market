@@ -6,6 +6,7 @@ import {
   getCartItems,
   getSession,
   getWishlistOfferIds,
+  migrateGuestOrdersToUser,
   migrateGuestWishlistAndCartToUser,
   toggleWishlistOffer,
 } from "../services/storage.js";
@@ -104,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("alpina:session-changed", () => {
     migrateGuestWishlistAndCartToUser();
+    migrateGuestOrdersToUser();
     renderWishlist();
   });
 

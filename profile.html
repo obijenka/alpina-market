@@ -226,6 +226,25 @@
                 </div>
               </div>
             </div>
+
+            <div class="profile-item" data-profile-item>
+              <button class="profile-item__head" type="button" data-profile-toggle aria-expanded="false">
+                <span class="profile-item__title">История заказов</span>
+                <span class="profile-item__meta" id="ordersMeta" aria-live="polite"></span>
+                <span class="profile-item__chev" aria-hidden="true"></span>
+              </button>
+              <div class="profile-item__body" data-profile-body>
+                <div class="profile-item__content">
+                  <div class="orders-tabs" aria-label="Статусы заказов">
+                    <button class="orders-tab is-active" type="button" data-orders-tab="current">Текущие</button>
+                    <button class="orders-tab" type="button" data-orders-tab="done">Выполненные</button>
+                    <button class="orders-tab" type="button" data-orders-tab="canceled">Отменённые</button>
+                  </div>
+
+                  <div class="orders-list" id="ordersList"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

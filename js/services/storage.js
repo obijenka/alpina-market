@@ -5,6 +5,7 @@ const STORAGE_KEYS = {
   faq: "alpina_faq_v1",
   guestWishlist: "alpina_guest_wishlist_v1",
   guestCart: "alpina_guest_cart_v1",
+  guestOrders: "alpina_guest_orders_v1",
 };
 
 async function sha256Hex(value) {
@@ -12,6 +13,208 @@ async function sha256Hex(value) {
   const digest = await crypto.subtle.digest("SHA-256", data);
   const bytes = Array.from(new Uint8Array(digest));
   return bytes.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+export function getAllOrdersAdmin() {
+  const users = getUsers();
+  const all = [];
+
+  users.forEach((u) => {
+    const userOrders = normalizeOrders(u?.orders);
+    userOrders.forEach((o) => {
+      all.push({
+        ...o,
+        owner: {
+          type: "user",
+          userId: String(u.id),
+        },
+        ownerLogin: String(u.login ?? ""),
+      });
+    });
+  });
+
+  const guestOrders = normalizeOrders(read(STORAGE_KEYS.guestOrders, []));
+  guestOrders.forEach((o) => {
+    all.push({
+      ...o,
+      owner: {
+        type: "guest",
+        userId: "",
+      },
+      ownerLogin: "Гость",
+    });
+  });
+
+  all.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  return all;
+}
+
+export function updateOrderStatusAdmin(orderId, status) {
+  const id = String(orderId ?? "").trim();
+  const nextStatus = String(status ?? "").trim();
+  if (!id || !nextStatus) return { ok: false };
+
+  const users = getUsers();
+  let found = false;
+  const nextUsers = users.map((u) => {
+    const currentOrders = normalizeOrders(u?.orders);
+    if (!currentOrders.some((o) => o.id === id)) return u;
+    found = true;
+    const nextOrders = currentOrders.map((o) => (o.id === id ? { ...o, status: nextStatus } : o));
+    return { ...u, orders: nextOrders, updatedAt: new Date().toISOString() };
+  });
+
+  if (found) {
+    setUsers(nextUsers);
+    return { ok: true };
+  }
+
+  const guestOrders = normalizeOrders(read(STORAGE_KEYS.guestOrders, []));
+  if (!guestOrders.some((o) => o.id === id)) {
+    return { ok: false, message: "Заказ не найден" };
+  }
+  const nextGuest = guestOrders.map((o) => (o.id === id ? { ...o, status: nextStatus } : o));
+  write(STORAGE_KEYS.guestOrders, nextGuest);
+  return { ok: true };
+}
+
+function normalizeOrders(value) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((o) => {
+      if (!o || typeof o !== "object") return null;
+      const id = String(o.id ?? "").trim();
+      const status = String(o.status ?? "current").trim() || "current";
+      const createdAt = String(o.createdAt ?? "").trim() || new Date().toISOString();
+      const owner = o.owner && typeof o.owner === "object" ? o.owner : {};
+      const items = Array.isArray(o.items)
+        ? o.items
+            .map((i) => {
+              if (!i || typeof i !== "object") return null;
+              const offerId = String(i.offerId ?? "").trim();
+              const qty = Number(i.qty ?? 1);
+              const price = Number(i.price ?? i.priceNumber ?? 0);
+              if (!offerId || !Number.isFinite(qty) || qty <= 0) return null;
+              return {
+                offerId,
+                qty,
+                title: String(i.title ?? "").trim(),
+                image: String(i.image ?? "").trim(),
+                price: Number.isFinite(price) ? price : 0,
+              };
+            })
+            .filter(Boolean)
+        : [];
+      const total = Number(o.total ?? 0);
+      const customer = o.customer && typeof o.customer === "object" ? o.customer : {};
+      return {
+        id: id || (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now())),
+        status,
+        createdAt,
+        owner: {
+          type: String(owner.type ?? "").trim(),
+          userId: String(owner.userId ?? "").trim(),
+        },
+        items,
+        total: Number.isFinite(total) ? total : 0,
+        customer: {
+          name: String(customer.name ?? "").trim(),
+          phone: String(customer.phone ?? "").trim(),
+          address: String(customer.address ?? "").trim(),
+        },
+      };
+    })
+    .filter(Boolean);
+}
+
+export function getOrders() {
+  const session = getSession();
+  if (session?.role === "user") {
+    const user = getCurrentUser();
+    return normalizeOrders(user?.orders);
+  }
+
+  return normalizeOrders(read(STORAGE_KEYS.guestOrders, []));
+}
+
+export function setOrders(orders) {
+  const session = getSession();
+  const normalized = normalizeOrders(orders);
+
+  if (session?.role === "user") {
+    const users = getUsers();
+    const user = users.find((u) => u.id === session.userId);
+    if (!user) return { ok: false, message: "Пользователь не найден" };
+
+    const nextUsers = users.map((u) => {
+      if (u.id !== user.id) return u;
+      return { ...u, orders: normalized, updatedAt: new Date().toISOString() };
+    });
+    setUsers(nextUsers);
+    return { ok: true };
+  }
+
+  write(STORAGE_KEYS.guestOrders, normalized);
+  return { ok: true };
+}
+
+export function addOrder({ items, total, customer }) {
+  const session = getSession();
+  const owner =
+    session?.role === "user"
+      ? { type: "user", userId: String(session.userId ?? "").trim() }
+      : { type: "guest", userId: "" };
+
+  const order = {
+    id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    status: "current",
+    createdAt: new Date().toISOString(),
+    owner,
+    items: Array.isArray(items) ? items : [],
+    total: Number(total ?? 0),
+    customer: customer && typeof customer === "object" ? customer : {},
+  };
+
+  const current = getOrders();
+  const next = [order, ...current];
+  const res = setOrders(next);
+  if (!res.ok) return res;
+  return { ok: true, order: normalizeOrders([order])[0] };
+}
+
+export function updateOrderStatus(orderId, status) {
+  const id = String(orderId ?? "").trim();
+  const nextStatus = String(status ?? "").trim();
+  if (!id || !nextStatus) return { ok: false };
+
+  const current = getOrders();
+  if (!current.some((o) => o.id === id)) return { ok: false, message: "Заказ не найден" };
+  const next = current.map((o) => (o.id === id ? { ...o, status: nextStatus } : o));
+  return setOrders(next);
+}
+
+export function migrateGuestOrdersToUser() {
+  const session = getSession();
+  if (session?.role !== "user") return { ok: false };
+
+  const guestOrders = normalizeOrders(read(STORAGE_KEYS.guestOrders, []));
+  if (guestOrders.length === 0) return { ok: true };
+
+  const users = getUsers();
+  const user = users.find((u) => u.id === session.userId);
+  if (!user) return { ok: false, message: "Пользователь не найден" };
+
+  const currentOrders = normalizeOrders(user.orders);
+  const nextOrders = [...guestOrders, ...currentOrders];
+
+  const nextUsers = users.map((u) => {
+    if (u.id !== user.id) return u;
+    return { ...u, orders: nextOrders, updatedAt: new Date().toISOString() };
+  });
+
+  setUsers(nextUsers);
+  localStorage.removeItem(STORAGE_KEYS.guestOrders);
+  return { ok: true };
 }
 
 function normalizeIdList(value) {
@@ -279,6 +482,7 @@ export async function addUser({ login, password }) {
     addresses: [],
     wishlist: [],
     cart: [],
+    orders: [],
     createdAt: new Date().toISOString(),
   };
 
