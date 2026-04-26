@@ -1,6 +1,8 @@
-import { OFFERS, renderOffers } from "./cardRenderer.js";
-import { RECENT_ITEMS, renderRecent } from "./recentRenderer.js";
-import { bindAuthModalTrigger, initAuthModal } from "./authModal.js";
+import { OFFERS } from "../data/offers.js";
+import { RECENT_ITEMS } from "../data/recent.js";
+import { renderOffers } from "../renderers/offers.js";
+import { renderRecent } from "../renderers/recent.js";
+import { bindAuthModalTrigger, initAuthModal } from "../auth/authModal.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const offersGrid = document.getElementById("offersGrid");

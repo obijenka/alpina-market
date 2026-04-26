@@ -8,7 +8,7 @@ import {
   loginAdmin,
   removeProduct,
   removeUser,
-} from "./storage.js";
+} from "../services/storage.js";
 
 function $(selector) {
   return document.querySelector(selector);
@@ -180,14 +180,14 @@ function initUserCreate() {
 
   if (!form) return;
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const formData = new FormData(form);
     const login = String(formData.get("login") ?? "");
     const password = String(formData.get("password") ?? "");
 
-    const result = addUser({ login, password });
+    const result = await addUser({ login, password });
     if (!result.ok) {
       if (error) error.textContent = result.message;
       return;

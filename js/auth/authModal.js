@@ -3,7 +3,7 @@ import {
   createSessionForUser,
   loginAdmin,
   loginUser,
-} from "./storage.js";
+} from "../services/storage.js";
 import { mountAuthModalMarkup } from "./authModalMarkup.js";
 
 function getEls() {
