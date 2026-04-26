@@ -1,5 +1,6 @@
 import { OFFERS, renderOffers } from "./cardRenderer.js";
 import { RECENT_ITEMS, renderRecent } from "./recentRenderer.js";
+import { bindAuthModalTrigger, initAuthModal } from "./authModal.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const offersGrid = document.getElementById("offersGrid");
@@ -7,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const recentGrid = document.getElementById("recentGrid");
   renderRecent(RECENT_ITEMS, recentGrid);
+
+  initAuthModal();
+  bindAuthModalTrigger({ selector: "#profileAction" });
 
   const burger = document.querySelector(".header__burger");
   const menu = document.querySelector(".mobile-menu");

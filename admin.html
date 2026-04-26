@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body>
+    <main class="admin">
+      <div class="admin__container">
+        <h1 class="admin__title">Админ-панель</h1>
+
+        <section class="admin__gate" id="adminGate">
+          <h2 class="admin__subtitle">Вход</h2>
+          <form class="admin-form" id="adminLoginForm">
+            <label class="admin-field">
+              <div class="admin-field__label">Логин</div>
+              <input class="admin-field__input" type="text" name="login" autocomplete="username" required />
+            </label>
+
+            <label class="admin-field">
+              <div class="admin-field__label">Пароль</div>
+              <input class="admin-field__input" type="password" name="password" autocomplete="current-password" required />
+            </label>
+
+            <div class="admin-form__error" id="adminLoginError"></div>
+
+            <button class="admin-btn" type="submit">Войти</button>
+
+            <div class="admin__hint">Логин и пароль: admin / admin</div>
+          </form>
+        </section>
+
+        <section class="admin__app" id="adminApp" style="display: none">
+          <div class="admin-layout">
+            <aside class="admin-sidebar" aria-label="Навигация">
+              <button class="admin-logout" id="adminLogoutBtn" type="button">Выйти</button>
+              <button class="admin-tab" type="button" data-admin-tab="products">Товары</button>
+              <button class="admin-tab" type="button" data-admin-tab="users">Пользователи</button>
+            </aside>
+
+            <div class="admin-content">
+              <div class="admin-panel" data-admin-panel="products">
+                <h2 class="admin__subtitle">Товары</h2>
+
+                <form class="admin-form" id="adminCreateProductForm">
+                  <label class="admin-field">
+                    <div class="admin-field__label">Название</div>
+                    <input class="admin-field__input" type="text" name="title" required />
+                  </label>
+
+                  <label class="admin-field">
+                    <div class="admin-field__label">Цена</div>
+                    <input class="admin-field__input" type="text" name="price" required />
+                  </label>
+
+                  <label class="admin-field">
+                    <div class="admin-field__label">Картинка (URL/путь)</div>
+                    <input class="admin-field__input" type="text" name="image" />
+                  </label>
+
+                  <div class="admin-form__error" id="adminCreateProductError"></div>
+
+                  <button class="admin-btn" type="submit">Добавить товар</button>
+                </form>
+
+                <div class="admin-list" id="adminProductsList"></div>
+              </div>
+
+              <div class="admin-panel" data-admin-panel="users">
+                <h2 class="admin__subtitle">Пользователи</h2>
+
+                <form class="admin-form" id="adminCreateUserForm">
+                  <label class="admin-field">
+                    <div class="admin-field__label">Логин</div>
+                    <input class="admin-field__input" type="text" name="login" required />
+                  </label>
+
+                  <label class="admin-field">
+                    <div class="admin-field__label">Пароль</div>
+                    <input class="admin-field__input" type="text" name="password" required />
+                  </label>
+
+                  <div class="admin-form__error" id="adminCreateUserError"></div>
+
+                  <button class="admin-btn" type="submit">Добавить пользователя</button>
+                </form>
+
+                <div class="admin-list" id="adminUsersList"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+     </div>
+   </main>
+
+    <script type="module" src="js/adminPanel.js"></script>
+  </body>
+</html>
