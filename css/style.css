@@ -163,6 +163,7 @@
    align-items: center;
    gap: 32px;
    padding-bottom: 10px;
+   border-bottom: 1px solid var(--line);
  }
  
  .header__menu-link {
@@ -638,19 +639,13 @@
  }
 
  .recent-card {
-   /* background: #E4E4E4; */
    height: 96px;
    display: grid;
    grid-template-columns: 100px 1fr;
    gap: 16px;
-   /* padding: 12px; */
  }
 
  .recent-card__image {
-   /* width: 74px;
-   height: 62px;
-   width: 100%;
-   height: 100%; */
    background: #E4E4E4;
    display: flex;
    align-items: center;
@@ -671,7 +666,6 @@
 
  .recent-card__name {
    line-height: 143%;
-   /* letter-spacing: 0.2px; */
    max-height: 40px;
    overflow: hidden;
  }
@@ -679,3 +673,139 @@
  .recent-card__price {
    letter-spacing: 0.2px;
  }
+
+ /* FOOTER */
+
+ .footer {
+   border-top: 1px solid var(--line);
+ }
+
+ .footer__top {
+   padding: 34px 0 40px;
+ }
+
+ .footer__top-inner {
+   display: grid;
+   grid-template-columns: 227px 123px 131px 216px 273px 77px 213px;
+   column-gap: 0;
+   align-items: start;
+ }
+
+ .footer__col-catalog {
+   grid-column: 1;
+ }
+
+ .footer__col-customer {
+   grid-column: 3;
+ }
+
+ .footer__contacts {
+   grid-column: 5;
+ }
+
+ .footer__pay {
+   grid-column: 7;
+ }
+
+ .footer__title {
+   font-size: 16px;
+   letter-spacing: 0.6px;
+   margin-bottom: 16px;
+ }
+
+ .footer__nav {
+   display: grid;
+   gap: 9px;
+ }
+
+ .footer__contact-label {
+   font-size: 12px;
+   letter-spacing: 0.8px;
+ }
+
+ .footer__phone {
+   font-size: 20px;
+   letter-spacing: 0.3px;
+ }
+
+ .footer__contact-note {
+   font-size: 12px;
+   margin-top: -4px;
+   letter-spacing: 0.9px;
+ }
+
+ .footer__social-label {
+   font-size: 12px;
+   letter-spacing: 0.8px;
+   margin-bottom: 10px;
+   padding-top: 16px;
+ }
+
+ .footer__social-icons {
+   display: flex;
+   gap: 10px;
+ }
+
+ .footer__social-link {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+ }
+
+ .footer__social-link img {
+   width: 100%;
+   height: 100%;
+ }
+
+ .footer__title.footer__title-cards {
+  margin-bottom: 14px;
+ }
+
+
+ .footer__cards img {
+   width: 192px;
+   height: 28px;
+ }
+
+ .footer__feedback {
+   margin-top: 60px;
+ }
+
+ .footer__feedback-label {
+   letter-spacing: 0.6px;
+   margin-bottom: 12px;
+ }
+
+ .footer__btn {
+   height: 32px;
+   width: 192px;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 2px;
+   border: 1px solid #000000;
+   letter-spacing: 0.6px;
+ }
+
+ .footer__bottom {
+   border-top: 1px solid var(--line);
+   padding: 18px 0;
+   font-size: 12px;
+   letter-spacing: 0.4px;
+ }
+
+ .footer__bottom-inner {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+ }
+
+ .footer__info {
+  display: flex;
+  gap: 80px;
+ }
+
+ .footer__privacy {
+  letter-spacing: 1px;
+ }
+
