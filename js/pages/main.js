@@ -2,7 +2,8 @@ import { OFFERS } from "../data/offers.js";
 import { RECENT_ITEMS } from "../data/recent.js";
 import { renderOffers } from "../renderers/offers.js";
 import { renderRecent } from "../renderers/recent.js";
-import { bindAuthModalTrigger, initAuthModal } from "../auth/authModal.js";
+import { initAuthModal, openAuthModal } from "../auth/authModal.js";
+import { getSession } from "../services/storage.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const offersGrid = document.getElementById("offersGrid");
@@ -12,7 +13,18 @@ document.addEventListener("DOMContentLoaded", () => {
   renderRecent(RECENT_ITEMS, recentGrid);
 
   initAuthModal();
-  bindAuthModalTrigger({ selector: "#profileAction" });
+  const profileAction = document.querySelector("#profileAction");
+  if (profileAction) {
+    profileAction.addEventListener("click", (e) => {
+      e.preventDefault();
+      const session = getSession();
+      if (session?.role === "user") {
+        window.location.href = "profile.html";
+        return;
+      }
+      openAuthModal();
+    });
+  }
 
   const burger = document.querySelector(".header__burger");
   const menu = document.querySelector(".mobile-menu");

@@ -39,6 +39,10 @@ function openModal() {
   document.body.style.overflow = "hidden";
 }
 
+export function openAuthModal() {
+  openModal();
+}
+
 function closeModal() {
   const { modal } = getEls();
   if (!modal) return;
@@ -114,6 +118,7 @@ function initLoginForm() {
 
     if (loginError) loginError.textContent = "";
     closeModal();
+    document.dispatchEvent(new CustomEvent("alpina:session-changed"));
   });
 }
 
@@ -140,6 +145,7 @@ function initRegisterForm() {
     localStorage.setItem("alpina_session_v1", JSON.stringify(session));
 
     closeModal();
+    document.dispatchEvent(new CustomEvent("alpina:session-changed"));
   });
 }
 

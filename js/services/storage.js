@@ -2,6 +2,7 @@ const STORAGE_KEYS = {
   users: "alpina_users_v1",
   session: "alpina_session_v1",
   products: "alpina_products_v1",
+  faq: "alpina_faq_v1",
 };
 
 async function sha256Hex(value) {
@@ -60,6 +61,12 @@ export async function addUser({ login, password }) {
     id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()),
     login: trimmedLogin,
     passwordHash,
+    profile: {
+      fullName: "",
+      phone: "",
+      email: "",
+    },
+    addresses: [],
     createdAt: new Date().toISOString(),
   };
 
@@ -146,6 +153,166 @@ export function clearSession() {
   localStorage.removeItem(STORAGE_KEYS.session);
 }
 
+export function getCurrentUser() {
+  const session = getSession();
+  if (!session || session.role !== "user") return null;
+  const users = getUsers();
+  return users.find((u) => u.id === session.userId) ?? null;
+}
+
+export function updateCurrentUserProfile({ fullName, phone, email }) {
+  const session = getSession();
+  if (!session || session.role !== "user") {
+    return { ok: false, message: "Нет активной сессии" };
+  }
+
+  const users = getUsers();
+  const user = users.find((u) => u.id === session.userId);
+  if (!user) return { ok: false, message: "Пользователь не найден" };
+
+  const nextProfile = {
+    ...(user.profile ?? {}),
+    fullName: String(fullName ?? "").trim(),
+    phone: String(phone ?? "").trim(),
+    email: String(email ?? "").trim(),
+  };
+
+  const nextUsers = users.map((u) => {
+    if (u.id !== user.id) return u;
+    return {
+      ...u,
+      profile: nextProfile,
+      updatedAt: new Date().toISOString(),
+    };
+  });
+
+  setUsers(nextUsers);
+  return { ok: true };
+}
+
+export function getCurrentUserAddresses() {
+  const user = getCurrentUser();
+  if (!user) return [];
+  return Array.isArray(user.addresses) ? user.addresses : [];
+}
+
+export function addCurrentUserAddress({ label, city, street, house, apartment, comment }) {
+  const session = getSession();
+  if (!session || session.role !== "user") {
+    return { ok: false, message: "Нет активной сессии" };
+  }
+
+  const trimmedCity = String(city ?? "").trim();
+  const trimmedStreet = String(street ?? "").trim();
+  const trimmedHouse = String(house ?? "").trim();
+
+  if (!trimmedCity || !trimmedStreet || !trimmedHouse) {
+    return { ok: false, message: "Заполни город, улицу и дом" };
+  }
+
+  const users = getUsers();
+  const user = users.find((u) => u.id === session.userId);
+  if (!user) return { ok: false, message: "Пользователь не найден" };
+
+  const current = Array.isArray(user.addresses) ? user.addresses : [];
+  const isFirst = current.length === 0;
+
+  const newAddress = {
+    id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    label: String(label ?? "").trim(),
+    city: trimmedCity,
+    street: trimmedStreet,
+    house: trimmedHouse,
+    apartment: String(apartment ?? "").trim(),
+    comment: String(comment ?? "").trim(),
+    isDefault: isFirst,
+    createdAt: new Date().toISOString(),
+  };
+
+  const nextAddresses = isFirst
+    ? [newAddress]
+    : [
+        ...current,
+        {
+          ...newAddress,
+          isDefault: false,
+        },
+      ];
+
+  const nextUsers = users.map((u) => {
+    if (u.id !== user.id) return u;
+    return {
+      ...u,
+      addresses: nextAddresses,
+      updatedAt: new Date().toISOString(),
+    };
+  });
+
+  setUsers(nextUsers);
+  return { ok: true, address: newAddress };
+}
+
+export function removeCurrentUserAddress(addressId) {
+  const session = getSession();
+  if (!session || session.role !== "user") {
+    return { ok: false, message: "Нет активной сессии" };
+  }
+
+  const users = getUsers();
+  const user = users.find((u) => u.id === session.userId);
+  if (!user) return { ok: false, message: "Пользователь не найден" };
+
+  const current = Array.isArray(user.addresses) ? user.addresses : [];
+  const removed = current.find((a) => a.id === addressId);
+  const next = current.filter((a) => a.id !== addressId);
+
+  if (removed?.isDefault && next.length > 0) {
+    next[0] = { ...next[0], isDefault: true };
+  }
+
+  const nextUsers = users.map((u) => {
+    if (u.id !== user.id) return u;
+    return {
+      ...u,
+      addresses: next,
+      updatedAt: new Date().toISOString(),
+    };
+  });
+
+  setUsers(nextUsers);
+  return { ok: true };
+}
+
+export function setCurrentUserDefaultAddress(addressId) {
+  const session = getSession();
+  if (!session || session.role !== "user") {
+    return { ok: false, message: "Нет активной сессии" };
+  }
+
+  const users = getUsers();
+  const user = users.find((u) => u.id === session.userId);
+  if (!user) return { ok: false, message: "Пользователь не найден" };
+
+  const current = Array.isArray(user.addresses) ? user.addresses : [];
+  if (!current.some((a) => a.id === addressId)) {
+    return { ok: false, message: "Адрес не найден" };
+  }
+
+  const next = current.map((a) => ({ ...a, isDefault: a.id === addressId }));
+
+  const nextUsers = users.map((u) => {
+    if (u.id !== user.id) return u;
+    return {
+      ...u,
+      addresses: next,
+      updatedAt: new Date().toISOString(),
+    };
+  });
+
+  setUsers(nextUsers);
+  return { ok: true };
+}
+
 export function loginAdmin({ login, password }) {
   const trimmedLogin = String(login ?? "").trim();
   const trimmedPassword = String(password ?? "").trim();
@@ -208,4 +375,49 @@ export function removeProduct(productId) {
   const products = getProducts();
   const next = products.filter((p) => p.id !== productId);
   setProducts(next);
+}
+
+export function getFaq() {
+  return read(STORAGE_KEYS.faq, []);
+}
+
+export function setFaq(items) {
+  write(STORAGE_KEYS.faq, items);
+}
+
+export function addFaqItem({ question, answer }) {
+  const trimmedQuestion = String(question ?? "").trim();
+
+  const answerLines = Array.isArray(answer)
+    ? answer.map((v) => String(v)).map((v) => v.trim()).filter(Boolean)
+    : String(answer ?? "")
+        .split("\n")
+        .map((v) => v.trim())
+        .filter(Boolean);
+
+  if (!trimmedQuestion) {
+    return { ok: false, message: "Введите вопрос" };
+  }
+
+  if (answerLines.length === 0) {
+    return { ok: false, message: "Введите ответ" };
+  }
+
+  const items = getFaq();
+
+  const newItem = {
+    id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    question: trimmedQuestion,
+    answer: answerLines,
+    createdAt: new Date().toISOString(),
+  };
+
+  setFaq([newItem, ...items]);
+  return { ok: true, item: newItem };
+}
+
+export function removeFaqItem(itemId) {
+  const items = getFaq();
+  const next = items.filter((i) => i.id !== itemId);
+  setFaq(next);
 }

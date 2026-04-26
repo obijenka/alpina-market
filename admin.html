@@ -39,6 +39,7 @@
               <button class="admin-logout" id="adminLogoutBtn" type="button">Выйти</button>
               <button class="admin-tab" type="button" data-admin-tab="products">Товары</button>
               <button class="admin-tab" type="button" data-admin-tab="users">Пользователи</button>
+              <button class="admin-tab" type="button" data-admin-tab="faq">FAQ</button>
             </aside>
 
             <div class="admin-content">
@@ -89,6 +90,28 @@
                 </form>
 
                 <div class="admin-list" id="adminUsersList"></div>
+              </div>
+
+              <div class="admin-panel" data-admin-panel="faq">
+                <h2 class="admin__subtitle">FAQ</h2>
+
+                <form class="admin-form" id="adminCreateFaqForm">
+                  <label class="admin-field">
+                    <div class="admin-field__label">Вопрос</div>
+                    <input class="admin-field__input" type="text" name="question" required />
+                  </label>
+
+                  <label class="admin-field">
+                    <div class="admin-field__label">Ответ (каждый абзац с новой строки)</div>
+                    <textarea class="admin-field__input" name="answer" rows="5" required></textarea>
+                  </label>
+
+                  <div class="admin-form__error" id="adminCreateFaqError"></div>
+
+                  <button class="admin-btn" type="submit">Добавить вопрос</button>
+                </form>
+
+                <div class="admin-list" id="adminFaqList"></div>
               </div>
             </div>
           </div>

@@ -1,12 +1,15 @@
 import {
   addProduct,
   addUser,
+  addFaqItem,
   clearSession,
+  getFaq,
   getProducts,
   getUsers,
   isAdminSession,
   loginAdmin,
   removeProduct,
+  removeFaqItem,
   removeUser,
 } from "../services/storage.js";
 
@@ -36,6 +39,41 @@ function setActiveAdminTab(tabName) {
       "is-active",
       panel.getAttribute("data-admin-panel") === tabName,
     );
+  });
+}
+
+function renderFaq() {
+  const list = $("#adminFaqList");
+  if (!list) return;
+
+  const items = getFaq();
+
+  if (items.length === 0) {
+    list.innerHTML = '<div class="admin__empty">Вопросов пока нет</div>';
+    return;
+  }
+
+  list.innerHTML = items
+    .map(
+      (i) => `
+        <div class="admin-row">
+          <div class="admin-row__main">
+            <div class="admin-row__title">${escapeHtml(i.question)}</div>
+            <div class="admin-row__meta">id: ${escapeHtml(i.id)}</div>
+          </div>
+          <button class="admin-btn admin-btn--danger" type="button" data-remove-faq="${escapeHtml(i.id)}">Удалить</button>
+        </div>
+      `.trim(),
+    )
+    .join("");
+
+  list.querySelectorAll("[data-remove-faq]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-remove-faq");
+      if (!id) return;
+      removeFaqItem(id);
+      renderFaq();
+    });
   });
 }
 
@@ -168,6 +206,7 @@ function initAdminAuth() {
       sync();
       renderUsers();
       renderProducts();
+      renderFaq();
     });
   }
 
@@ -225,15 +264,42 @@ function initProductCreate() {
   });
 }
 
+function initFaqCreate() {
+  const form = $("#adminCreateFaqForm");
+  const error = $("#adminCreateFaqError");
+
+  if (!form) return;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const question = String(formData.get("question") ?? "");
+    const answer = String(formData.get("answer") ?? "");
+
+    const result = addFaqItem({ question, answer });
+    if (!result.ok) {
+      if (error) error.textContent = result.message;
+      return;
+    }
+
+    if (error) error.textContent = "";
+    form.reset();
+    renderFaq();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initAdminAuth();
   initAdminTabs();
   initAdminLogout();
   initUserCreate();
   initProductCreate();
+  initFaqCreate();
 
   if (isAdminSession()) {
     renderUsers();
     renderProducts();
+    renderFaq();
   }
 });
