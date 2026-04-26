@@ -330,7 +330,7 @@
  /* OFFERS */
 
  .offers {
-   padding-bottom: 86px;
+   padding-bottom: 139px;
  }
 
  .offers__grid {
@@ -348,13 +348,6 @@
     background: #f6f6f6;
     position: relative;
  }
-
- /* .offer-card__head {
-   display: flex;
-   align-items: flex-start;
-   justify-content: space-between;
-   margin-bottom: 10px;
- } */
 
  .offer-card__badge {
    width: 74px;
@@ -465,4 +458,115 @@
    display: inline-flex;
    align-items: center;
    justify-content: center;
+ }
+
+ /* COLLECTIONS */
+
+ .collections {
+   padding-bottom: 102px;
+ }
+
+ .collections__grid {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 28px;
+ }
+
+ .collection-card {
+   display: block;
+ }
+
+ .collection-card__image {
+   height: 252px;
+   overflow: hidden;
+   margin-bottom: 20px;
+ }
+
+ .collection-card__image img {
+   display: block;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+ }
+
+ .collection-card__title {
+   font-size: 16px;
+   letter-spacing: 0.8px;
+ }
+
+ /* DESIGN */
+
+ .design {
+   padding-bottom: 68px;
+ }
+
+ .design__inner {
+   display: grid;
+   grid-template-columns: 680px 1fr;
+   gap: 16px;
+ }
+
+ .design__info {
+   background: #f6f6f6;
+   padding: 52px;
+   min-height: 420px;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+ }
+
+ .design__title {
+   font-size: 34px;
+   line-height: 40px;
+   letter-spacing: 1.7px;
+   color: #079294;
+   max-width: 330px;
+ }
+
+ .design__text {
+   max-width: 480px;
+   font-size: 16px;
+   line-height: 24px;
+   letter-spacing: 0.4px;
+ }
+
+ .design__grid {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 16px;
+   align-content: center;
+ }
+
+ .design-card {
+   background: #f6f6f6;
+   height: 202px;
+   padding: 16px 16px 0px 16px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: flex-start;
+   text-align: center;
+ }
+
+ .design-card__icon {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   margin-bottom: 16px;
+ }
+
+ .design-card__icon img {
+   width: 104px;
+   height: 114px;
+ }
+
+ .design-card__title {
+   font-size: 16px;
+   line-height: 24px;
+   /* letter-spacing: 0.3px; */   
+ }
+
+ .design-card--tall {
+   grid-column: 3;
+   grid-row: 1 / span 2;
  }
