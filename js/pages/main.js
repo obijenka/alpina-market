@@ -4,6 +4,7 @@ import { renderOffers } from "../renderers/offers.js";
 import { renderRecent } from "../renderers/recent.js";
 import { initAuthModal, openAuthModal } from "../auth/authModal.js";
 import { getSession } from "../services/storage.js";
+import { bindBookingModalTrigger, initBookingModal } from "../booking/bookingModal.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const offersGrid = document.getElementById("offersGrid");
@@ -13,6 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
   renderRecent(RECENT_ITEMS, recentGrid);
 
   initAuthModal();
+
+  initBookingModal();
+  bindBookingModalTrigger({ selector: "#bookingAction" });
+
   const profileAction = document.querySelector("#profileAction");
   if (profileAction) {
     profileAction.addEventListener("click", (e) => {
