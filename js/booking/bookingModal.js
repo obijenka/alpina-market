@@ -1,4 +1,5 @@
 import { mountBookingModalMarkup } from "./bookingModalMarkup.js";
+import { getCurrentUser } from "../services/storage.js";
 
 function getEls() {
   const modal = document.querySelector(".booking-modal");
@@ -24,6 +25,31 @@ function getEls() {
 function openModal() {
   const { modal } = getEls();
   if (!modal) return;
+
+  const { form } = getEls();
+  if (form instanceof HTMLFormElement) {
+    const user = getCurrentUser();
+    const nameInput = form.querySelector("[name='name']");
+    const phoneInput = form.querySelector("[name='phone']");
+    const emailInput = form.querySelector("[name='email']");
+
+    if (user?.profile) {
+      const fullName = String(user.profile.fullName ?? "").trim();
+      const phone = String(user.profile.phone ?? "").trim();
+      const email = String(user.profile.email ?? "").trim();
+
+      if (nameInput instanceof HTMLInputElement && !nameInput.value.trim() && fullName) {
+        nameInput.value = fullName;
+      }
+      if (phoneInput instanceof HTMLInputElement && !phoneInput.value.trim() && phone) {
+        phoneInput.value = phone;
+      }
+      if (emailInput instanceof HTMLInputElement && !emailInput.value.trim() && email) {
+        emailInput.value = email;
+      }
+    }
+  }
+
   modal.classList.add("is-open");
   document.body.style.overflow = "hidden";
 }

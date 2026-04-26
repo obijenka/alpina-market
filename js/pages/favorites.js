@@ -3,6 +3,7 @@ import { renderOffers } from "../renderers/offers.js";
 import { initAuthModal, openAuthModal } from "../auth/authModal.js";
 import {
   addOfferToCart,
+  getCartItems,
   getSession,
   getWishlistOfferIds,
   migrateGuestWishlistAndCartToUser,
@@ -24,6 +25,20 @@ function syncOfferFavIcons(rootEl) {
   });
 }
 
+function syncOfferCartButtons(rootEl) {
+  if (!rootEl) return;
+  const cart = new Set(getCartItems().map((i) => String(i.offerId)));
+  rootEl.querySelectorAll(".offer-card").forEach((card) => {
+    if (!(card instanceof HTMLElement)) return;
+    const offerId = String(card.dataset.offerId ?? "");
+    const cartBtn = card.querySelector(".offer-card__cart");
+    if (!(cartBtn instanceof HTMLButtonElement)) return;
+    const inCart = cart.has(offerId);
+    cartBtn.classList.toggle("is-in-cart", inCart);
+    cartBtn.setAttribute("aria-label", inCart ? "В корзине" : "В корзину");
+  });
+}
+
 function renderWishlist() {
   const rootEl = document.getElementById("favoritesGrid");
   const emptyEl = document.getElementById("favoritesEmpty");
@@ -38,6 +53,7 @@ function renderWishlist() {
 
   renderOffers(items, rootEl);
   syncOfferFavIcons(rootEl);
+  syncOfferCartButtons(rootEl);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -66,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (cartBtn) {
         e.preventDefault();
         addOfferToCart(offerId, 1);
+        renderWishlist();
       }
     });
   }

@@ -571,6 +571,30 @@
    justify-content: center;
  }
 
+ .offer-card__cart-label {
+   display: none;
+ }
+
+ .offer-card__cart.is-in-cart {
+   width: auto;
+   height: 34px;
+   padding: 0 16px;
+   border-radius: 6px;
+   background: #079294;
+   color: #ffffff;
+   font-size: 12px;
+   letter-spacing: 4px;
+   text-transform: uppercase;
+ }
+
+ .offer-card__cart.is-in-cart img {
+   display: none;
+ }
+
+ .offer-card__cart.is-in-cart .offer-card__cart-label {
+   display: inline;
+ }
+
  /* COLLECTIONS */
 
  .collections {

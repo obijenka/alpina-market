@@ -28,6 +28,7 @@ function createOfferCard(offer) {
         </div>
         <button class="offer-card__cart" type="button" aria-label="В корзину">
           <img width="21" height="21" src="assets/icons/cart-black.svg" alt="" />
+          <span class="offer-card__cart-label">В КОРЗИНЕ</span>
         </button>
       </div>
     </div>

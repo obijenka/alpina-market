@@ -123,6 +123,63 @@ export function addOfferToCart(offerId, qty = 1) {
   return { ok: true };
 }
 
+export function setCartItems(items) {
+  const session = getSession();
+  const normalized = normalizeCart(items);
+
+  if (session?.role === "user") {
+    const users = getUsers();
+    const user = users.find((u) => u.id === session.userId);
+    if (!user) return { ok: false, message: "Пользователь не найден" };
+
+    const nextUsers = users.map((u) => {
+      if (u.id !== user.id) return u;
+      return { ...u, cart: normalized, updatedAt: new Date().toISOString() };
+    });
+    setUsers(nextUsers);
+    return { ok: true };
+  }
+
+  write(STORAGE_KEYS.guestCart, normalized);
+  return { ok: true };
+}
+
+export function updateCartOfferQty(offerId, qty) {
+  const id = String(offerId ?? "").trim();
+  const nextQty = Number(qty);
+  if (!id || !Number.isFinite(nextQty)) return { ok: false };
+
+  if (nextQty <= 0) {
+    return removeOfferFromCart(id);
+  }
+
+  const current = getCartItems();
+  const next = current.some((i) => i.offerId === id)
+    ? current.map((i) => (i.offerId === id ? { ...i, qty: nextQty } : i))
+    : [{ offerId: id, qty: nextQty }, ...current];
+
+  return setCartItems(next);
+}
+
+export function removeOfferFromCart(offerId) {
+  const id = String(offerId ?? "").trim();
+  if (!id) return { ok: false };
+  const current = getCartItems();
+  const next = current.filter((i) => i.offerId !== id);
+  return setCartItems(next);
+}
+
+export function removeOffersFromCart(offerIds) {
+  const ids = new Set(normalizeIdList(offerIds));
+  const current = getCartItems();
+  const next = current.filter((i) => !ids.has(i.offerId));
+  return setCartItems(next);
+}
+
+export function clearCart() {
+  return setCartItems([]);
+}
+
 export function migrateGuestWishlistAndCartToUser() {
   const session = getSession();
   if (session?.role !== "user") return { ok: false };
