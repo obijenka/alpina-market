@@ -3,6 +3,8 @@ const STORAGE_KEYS = {
   session: "alpina_session_v1",
   products: "alpina_products_v1",
   faq: "alpina_faq_v1",
+  guestWishlist: "alpina_guest_wishlist_v1",
+  guestCart: "alpina_guest_cart_v1",
 };
 
 async function sha256Hex(value) {
@@ -10,6 +12,157 @@ async function sha256Hex(value) {
   const digest = await crypto.subtle.digest("SHA-256", data);
   const bytes = Array.from(new Uint8Array(digest));
   return bytes.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function normalizeIdList(value) {
+  if (!Array.isArray(value)) return [];
+  return value.map((v) => String(v)).filter(Boolean);
+}
+
+function normalizeCart(value) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => {
+      if (!item || typeof item !== "object") return null;
+      const offerId = String(item.offerId ?? "").trim();
+      const qty = Number(item.qty ?? 1);
+      if (!offerId) return null;
+      if (!Number.isFinite(qty) || qty <= 0) return null;
+      return { offerId, qty };
+    })
+    .filter(Boolean);
+}
+
+export function getWishlistOfferIds() {
+  const session = getSession();
+  if (session?.role === "user") {
+    const user = getCurrentUser();
+    return normalizeIdList(user?.wishlist);
+  }
+
+  return normalizeIdList(read(STORAGE_KEYS.guestWishlist, []));
+}
+
+export function isOfferInWishlist(offerId) {
+  const id = String(offerId ?? "").trim();
+  if (!id) return false;
+  return getWishlistOfferIds().includes(id);
+}
+
+export function toggleWishlistOffer(offerId) {
+  const id = String(offerId ?? "").trim();
+  if (!id) return { ok: false };
+
+  const session = getSession();
+  if (session?.role === "user") {
+    const users = getUsers();
+    const user = users.find((u) => u.id === session.userId);
+    if (!user) return { ok: false, message: "Пользователь не найден" };
+
+    const current = normalizeIdList(user.wishlist);
+    const next = current.includes(id) ? current.filter((x) => x !== id) : [id, ...current];
+
+    const nextUsers = users.map((u) => {
+      if (u.id !== user.id) return u;
+      return { ...u, wishlist: next, updatedAt: new Date().toISOString() };
+    });
+
+    setUsers(nextUsers);
+    return { ok: true, inWishlist: next.includes(id) };
+  }
+
+  const current = getWishlistOfferIds();
+  const next = current.includes(id) ? current.filter((x) => x !== id) : [id, ...current];
+  write(STORAGE_KEYS.guestWishlist, next);
+  return { ok: true, inWishlist: next.includes(id) };
+}
+
+export function getCartItems() {
+  const session = getSession();
+  if (session?.role === "user") {
+    const user = getCurrentUser();
+    return normalizeCart(user?.cart);
+  }
+
+  return normalizeCart(read(STORAGE_KEYS.guestCart, []));
+}
+
+export function addOfferToCart(offerId, qty = 1) {
+  const id = String(offerId ?? "").trim();
+  const addQty = Number(qty);
+  if (!id || !Number.isFinite(addQty) || addQty <= 0) return { ok: false };
+
+  const session = getSession();
+  if (session?.role === "user") {
+    const users = getUsers();
+    const user = users.find((u) => u.id === session.userId);
+    if (!user) return { ok: false, message: "Пользователь не найден" };
+
+    const current = normalizeCart(user.cart);
+    const existing = current.find((i) => i.offerId === id);
+    const next = existing
+      ? current.map((i) => (i.offerId === id ? { ...i, qty: i.qty + addQty } : i))
+      : [{ offerId: id, qty: addQty }, ...current];
+
+    const nextUsers = users.map((u) => {
+      if (u.id !== user.id) return u;
+      return { ...u, cart: next, updatedAt: new Date().toISOString() };
+    });
+
+    setUsers(nextUsers);
+    return { ok: true };
+  }
+
+  const current = getCartItems();
+  const existing = current.find((i) => i.offerId === id);
+  const next = existing
+    ? current.map((i) => (i.offerId === id ? { ...i, qty: i.qty + addQty } : i))
+    : [{ offerId: id, qty: addQty }, ...current];
+
+  write(STORAGE_KEYS.guestCart, next);
+  return { ok: true };
+}
+
+export function migrateGuestWishlistAndCartToUser() {
+  const session = getSession();
+  if (session?.role !== "user") return { ok: false };
+
+  const guestWishlist = normalizeIdList(read(STORAGE_KEYS.guestWishlist, []));
+  const guestCart = normalizeCart(read(STORAGE_KEYS.guestCart, []));
+  if (guestWishlist.length === 0 && guestCart.length === 0) return { ok: true };
+
+  const users = getUsers();
+  const user = users.find((u) => u.id === session.userId);
+  if (!user) return { ok: false, message: "Пользователь не найден" };
+
+  const currentWishlist = normalizeIdList(user.wishlist);
+  const nextWishlist = Array.from(new Set([...guestWishlist, ...currentWishlist]));
+
+  const currentCart = normalizeCart(user.cart);
+  const nextCart = [...currentCart];
+  guestCart.forEach((guestItem) => {
+    const existing = nextCart.find((i) => i.offerId === guestItem.offerId);
+    if (existing) {
+      existing.qty += guestItem.qty;
+    } else {
+      nextCart.push({ ...guestItem });
+    }
+  });
+
+  const nextUsers = users.map((u) => {
+    if (u.id !== user.id) return u;
+    return {
+      ...u,
+      wishlist: nextWishlist,
+      cart: nextCart,
+      updatedAt: new Date().toISOString(),
+    };
+  });
+
+  setUsers(nextUsers);
+  localStorage.removeItem(STORAGE_KEYS.guestWishlist);
+  localStorage.removeItem(STORAGE_KEYS.guestCart);
+  return { ok: true };
 }
 
 function safeJsonParse(value, fallback) {
@@ -67,6 +220,8 @@ export async function addUser({ login, password }) {
       email: "",
     },
     addresses: [],
+    wishlist: [],
+    cart: [],
     createdAt: new Date().toISOString(),
   };
 

@@ -1,7 +1,5 @@
 import { OFFERS } from "../data/offers.js";
-import { RECENT_ITEMS } from "../data/recent.js";
 import { renderOffers } from "../renderers/offers.js";
-import { renderRecent } from "../renderers/recent.js";
 import { initAuthModal, openAuthModal } from "../auth/authModal.js";
 import {
   addOfferToCart,
@@ -10,7 +8,6 @@ import {
   migrateGuestWishlistAndCartToUser,
   toggleWishlistOffer,
 } from "../services/storage.js";
-import { bindBookingModalTrigger, initBookingModal } from "../booking/bookingModal.js";
 
 function syncOfferFavIcons(rootEl) {
   if (!rootEl) return;
@@ -27,13 +24,28 @@ function syncOfferFavIcons(rootEl) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const offersGrid = document.getElementById("offersGrid");
-  renderOffers(OFFERS, offersGrid);
-  syncOfferFavIcons(offersGrid);
+function renderWishlist() {
+  const rootEl = document.getElementById("favoritesGrid");
+  const emptyEl = document.getElementById("favoritesEmpty");
 
-  if (offersGrid) {
-    offersGrid.addEventListener("click", (e) => {
+  const wishlistIds = getWishlistOfferIds();
+  const wishlist = new Set(wishlistIds);
+  const items = OFFERS.filter((o) => wishlist.has(String(o.id)));
+
+  if (emptyEl) {
+    emptyEl.style.display = items.length === 0 ? "block" : "none";
+  }
+
+  renderOffers(items, rootEl);
+  syncOfferFavIcons(rootEl);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderWishlist();
+
+  const grid = document.getElementById("favoritesGrid");
+  if (grid) {
+    grid.addEventListener("click", (e) => {
       const target = e.target;
       if (!(target instanceof Element)) return;
 
@@ -46,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (favBtn) {
         e.preventDefault();
         toggleWishlistOffer(offerId);
-        syncOfferFavIcons(offersGrid);
+        renderWishlist();
         return;
       }
 
@@ -58,13 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const recentGrid = document.getElementById("recentGrid");
-  renderRecent(RECENT_ITEMS, recentGrid);
-
   initAuthModal();
-
-  initBookingModal();
-  bindBookingModalTrigger({ selector: "#bookingAction" });
 
   const profileAction = document.querySelector("#profileAction");
   if (profileAction) {
@@ -81,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("alpina:session-changed", () => {
     migrateGuestWishlistAndCartToUser();
-    syncOfferFavIcons(offersGrid);
+    renderWishlist();
   });
 
   const burger = document.querySelector(".header__burger");
@@ -100,21 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.style.overflow = "";
   }
 
-  if (burger && menu) {
-    burger.addEventListener("click", openMenu);
-  }
-
+  if (burger) burger.addEventListener("click", openMenu);
   closeEls.forEach((el) => el.addEventListener("click", closeMenu));
-
-  if (menu) {
-    menu.addEventListener("click", (e) => {
-      const target = e.target;
-      if (!(target instanceof Element)) return;
-      if (target.closest("a")) closeMenu();
-    });
-  }
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
-  });
 });
