@@ -201,6 +201,11 @@ function initCartEvents() {
         await renderCart();
         return;
       }
+
+      if (target.closest("[data-cart-qty]")) return;
+
+      e.preventDefault();
+      window.location.href = `product.html?id=${encodeURIComponent(offerId)}`;
     })();
   });
 

@@ -4,6 +4,16 @@ export async function getProducts() {
   return apiGet("/products");
 }
 
+export async function getProductById(productId) {
+  const id = String(productId ?? "").trim();
+  if (!id) return null;
+  try {
+    return await apiGet(`/products/${encodeURIComponent(id)}`);
+  } catch {
+    return null;
+  }
+}
+
 export async function addProduct({ title, price, image }) {
   const trimmedTitle = String(title ?? "").trim();
   const trimmedPrice = String(price ?? "").trim();

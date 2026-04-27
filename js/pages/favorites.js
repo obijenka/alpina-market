@@ -85,7 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
           e.preventDefault();
           await addOfferToCart(offerId, 1);
           await renderWishlist();
+          return;
         }
+
+        e.preventDefault();
+        window.location.href = `product.html?id=${encodeURIComponent(offerId)}`;
       })();
     });
   }

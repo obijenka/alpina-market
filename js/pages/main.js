@@ -80,7 +80,11 @@ document.addEventListener("DOMContentLoaded", () => {
           e.preventDefault();
           await addOfferToCart(offerId, 1);
           await syncOfferCartButtons(offersGrid);
+          return;
         }
+
+        e.preventDefault();
+        window.location.href = `product.html?id=${encodeURIComponent(offerId)}`;
       })();
     });
   }

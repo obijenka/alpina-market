@@ -1,70 +1,4 @@
 {
-  "offers": [
-    {
-      "id": "1",
-      "title": "Декоративный куст, с шикарными листьями, горшком",
-      "price": "2 000 руб.",
-      "size": "120 × 212 × 46",
-      "image": "assets/offers/offer1.png",
-      "badge": "Распродажа"
-    },
-    {
-      "id": "2",
-      "title": "Декоративный куст, с шикарными листьями, горшком",
-      "price": "2 000 руб.",
-      "size": "120 × 212 × 46",
-      "image": "assets/offers/offer2.png",
-      "badge": "Распродажа"
-    },
-    {
-      "id": "3",
-      "title": "Декоративный куст, с шикарными листьями, горшком",
-      "price": "2 000 руб.",
-      "size": "120 × 212 × 46",
-      "image": "assets/offers/offer3.png",
-      "badge": "Распродажа"
-    },
-    {
-      "id": "4",
-      "title": "Декоративный куст, с шикарными листьями, горшком",
-      "price": "2 000 руб.",
-      "size": "120 × 212 × 46",
-      "image": "assets/offers/offer4.png",
-      "badge": "Распродажа"
-    },
-    {
-      "id": "5",
-      "title": "Декоративный куст, с шикарными листьями, горшком",
-      "price": "2 000 руб.",
-      "size": "120 × 212 × 46",
-      "image": "assets/offers/offer5.png",
-      "badge": "Распродажа"
-    },
-    {
-      "id": "6",
-      "title": "Декоративный куст, с шикарными листьями, горшком",
-      "price": "2 000 руб.",
-      "size": "120 × 212 × 46",
-      "image": "assets/offers/offer6.png",
-      "badge": "Распродажа"
-    },
-    {
-      "id": "7",
-      "title": "Декоративный куст, с шикарными листьями, горшком",
-      "price": "2 000 руб.",
-      "size": "120 × 212 × 46",
-      "image": "assets/offers/offer7.png",
-      "badge": "Распродажа"
-    },
-    {
-      "id": "8",
-      "title": "Декоративный куст, с шикарными листьями, горшком",
-      "price": "2 000 руб.",
-      "size": "120 × 212 × 46",
-      "image": "assets/offers/offer8.png",
-      "badge": "Распродажа"
-    }
-  ],
   "recent": [
     {
       "id": "1",
@@ -178,14 +112,1059 @@
       "login": "admin",
       "passwordHash": "",
       "role": "admin",
-      "profile": { "fullName": "", "phone": "", "email": "" },
+      "profile": {
+        "fullName": "",
+        "phone": "",
+        "email": ""
+      },
       "addresses": [],
       "wishlist": [],
       "cart": [],
       "orders": []
+    },
+    {
+      "id": "7fc31798-cd1f-41ee-8cf9-cf8c2ac9386f",
+      "login": "Лиза2",
+      "passwordHash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+      "role": "user",
+      "profile": {
+        "fullName": "",
+        "phone": "",
+        "email": ""
+      },
+      "addresses": [],
+      "wishlist": [
+        "1"
+      ],
+      "cart": [
+        {
+          "offerId": "1",
+          "qty": 6
+        }
+      ],
+      "orders": [],
+      "createdAt": "2026-04-27T12:47:14.853Z",
+      "updatedAt": "2026-04-27T13:44:05.934Z"
     }
   ],
-  "products": [],
+  "products": [
+    {
+      "id": "1",
+      "sku": "ALP-OFFER-0001",
+      "title": "Декоративный куст, с шикарными листьями, горшком",
+      "description": "Декоративный куст для интерьера в горшке.",
+      "priceText": "2 000 руб.",
+      "size": "120 × 212 × 46",
+      "image": "assets/offers/offer1.png",
+      "badge": "Распродажа",
+      "showOnHome": true,
+      "homeOrder": 1,
+      "price": 2000,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Декор",
+      "categories": [
+        "Товары для дома",
+        "Декор"
+      ],
+      "tags": [
+        "декор",
+        "растение",
+        "куст"
+      ],
+      "images": [
+        "assets/offers/offer1.png"
+      ],
+      "attributes": {
+        "room": "Гостиная",
+        "material": "Искусственные материалы",
+        "color": "Зелёный",
+        "style": "Современный",
+        "size": "120 × 212 × 46"
+      },
+      "dimensions": {
+        "raw": "120 × 212 × 46"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Распродажа",
+      "searchKeywords": [
+        "куст",
+        "растение",
+        "декор",
+        "горшок",
+        "листья"
+      ],
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-01T00:00:00.000Z",
+      "updatedAt": "2026-04-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "sku": "ALP-OFFER-0002",
+      "title": "Декоративный куст, с шикарными листьями, горшком",
+      "description": "Декоративный куст для интерьера в горшке.",
+      "priceText": "2 000 руб.",
+      "size": "120 × 212 × 46",
+      "image": "assets/offers/offer2.png",
+      "badge": "Распродажа",
+      "showOnHome": true,
+      "homeOrder": 2,
+      "price": 2000,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Декор",
+      "categories": [
+        "Товары для дома",
+        "Декор"
+      ],
+      "tags": [
+        "декор",
+        "растение",
+        "куст"
+      ],
+      "images": [
+        "assets/offers/offer2.png"
+      ],
+      "attributes": {
+        "room": "Гостиная",
+        "material": "Искусственные материалы",
+        "color": "Зелёный",
+        "style": "Современный",
+        "size": "120 × 212 × 46"
+      },
+      "dimensions": {
+        "raw": "120 × 212 × 46"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Распродажа",
+      "searchKeywords": [
+        "куст",
+        "растение",
+        "декор",
+        "горшок",
+        "листья"
+      ],
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-01T00:00:00.000Z",
+      "updatedAt": "2026-04-01T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "sku": "ALP-OFFER-0003",
+      "title": "Декоративный куст, с шикарными листьями, горшком",
+      "description": "Декоративный куст для интерьера в горшке.",
+      "priceText": "2 000 руб.",
+      "size": "120 × 212 × 46",
+      "image": "assets/offers/offer3.png",
+      "badge": "Распродажа",
+      "showOnHome": true,
+      "homeOrder": 3,
+      "price": 2000,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Декор",
+      "categories": [
+        "Товары для дома",
+        "Декор"
+      ],
+      "tags": [
+        "декор",
+        "растение",
+        "куст"
+      ],
+      "images": [
+        "assets/offers/offer3.png"
+      ],
+      "attributes": {
+        "room": "Гостиная",
+        "material": "Искусственные материалы",
+        "color": "Зелёный",
+        "style": "Современный",
+        "size": "120 × 212 × 46"
+      },
+      "dimensions": {
+        "raw": "120 × 212 × 46"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Распродажа",
+      "searchKeywords": [
+        "куст",
+        "растение",
+        "декор",
+        "горшок",
+        "листья"
+      ],
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-01T00:00:00.000Z",
+      "updatedAt": "2026-04-01T00:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "sku": "ALP-OFFER-0004",
+      "title": "Декоративный куст, с шикарными листьями, горшком",
+      "description": "Декоративный куст для интерьера в горшке.",
+      "priceText": "2 000 руб.",
+      "size": "120 × 212 × 46",
+      "image": "assets/offers/offer4.png",
+      "badge": "Распродажа",
+      "showOnHome": true,
+      "homeOrder": 4,
+      "price": 2000,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Декор",
+      "categories": [
+        "Товары для дома",
+        "Декор"
+      ],
+      "tags": [
+        "декор",
+        "растение",
+        "куст"
+      ],
+      "images": [
+        "assets/offers/offer4.png"
+      ],
+      "attributes": {
+        "room": "Гостиная",
+        "material": "Искусственные материалы",
+        "color": "Зелёный",
+        "style": "Современный",
+        "size": "120 × 212 × 46"
+      },
+      "dimensions": {
+        "raw": "120 × 212 × 46"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Распродажа",
+      "searchKeywords": [
+        "куст",
+        "растение",
+        "декор",
+        "горшок",
+        "листья"
+      ],
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-01T00:00:00.000Z",
+      "updatedAt": "2026-04-01T00:00:00.000Z"
+    },
+    {
+      "id": "5",
+      "sku": "ALP-OFFER-0005",
+      "title": "Декоративный куст, с шикарными листьями, горшком",
+      "description": "Декоративный куст для интерьера в горшке.",
+      "priceText": "2 000 руб.",
+      "size": "120 × 212 × 46",
+      "image": "assets/offers/offer5.png",
+      "badge": "Распродажа",
+      "showOnHome": true,
+      "homeOrder": 5,
+      "price": 2000,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Декор",
+      "categories": [
+        "Товары для дома",
+        "Декор"
+      ],
+      "tags": [
+        "декор",
+        "растение",
+        "куст"
+      ],
+      "images": [
+        "assets/offers/offer5.png"
+      ],
+      "attributes": {
+        "room": "Гостиная",
+        "material": "Искусственные материалы",
+        "color": "Зелёный",
+        "style": "Современный",
+        "size": "120 × 212 × 46"
+      },
+      "dimensions": {
+        "raw": "120 × 212 × 46"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Распродажа",
+      "searchKeywords": [
+        "куст",
+        "растение",
+        "декор",
+        "горшок",
+        "листья"
+      ],
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-01T00:00:00.000Z",
+      "updatedAt": "2026-04-01T00:00:00.000Z"
+    },
+    {
+      "id": "6",
+      "sku": "ALP-OFFER-0006",
+      "title": "Декоративный куст, с шикарными листьями, горшком",
+      "description": "Декоративный куст для интерьера в горшке.",
+      "priceText": "2 000 руб.",
+      "size": "120 × 212 × 46",
+      "image": "assets/offers/offer6.png",
+      "badge": "Распродажа",
+      "showOnHome": true,
+      "homeOrder": 6,
+      "price": 2000,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Декор",
+      "categories": [
+        "Товары для дома",
+        "Декор"
+      ],
+      "tags": [
+        "декор",
+        "растение",
+        "куст"
+      ],
+      "images": [
+        "assets/offers/offer6.png"
+      ],
+      "attributes": {
+        "room": "Гостиная",
+        "material": "Искусственные материалы",
+        "color": "Зелёный",
+        "style": "Современный",
+        "size": "120 × 212 × 46"
+      },
+      "dimensions": {
+        "raw": "120 × 212 × 46"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Распродажа",
+      "searchKeywords": [
+        "куст",
+        "растение",
+        "декор",
+        "горшок",
+        "листья"
+      ],
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-01T00:00:00.000Z",
+      "updatedAt": "2026-04-01T00:00:00.000Z"
+    },
+    {
+      "id": "7",
+      "sku": "ALP-OFFER-0007",
+      "title": "Декоративный куст, с шикарными листьями, горшком",
+      "description": "Декоративный куст для интерьера в горшке.",
+      "priceText": "2 000 руб.",
+      "size": "120 × 212 × 46",
+      "image": "assets/offers/offer7.png",
+      "badge": "Распродажа",
+      "showOnHome": true,
+      "homeOrder": 7,
+      "price": 2000,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Декор",
+      "categories": [
+        "Товары для дома",
+        "Декор"
+      ],
+      "tags": [
+        "декор",
+        "растение",
+        "куст"
+      ],
+      "images": [
+        "assets/offers/offer7.png"
+      ],
+      "attributes": {
+        "room": "Гостиная",
+        "material": "Искусственные материалы",
+        "color": "Зелёный",
+        "style": "Современный",
+        "size": "120 × 212 × 46"
+      },
+      "dimensions": {
+        "raw": "120 × 212 × 46"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Распродажа",
+      "searchKeywords": [
+        "куст",
+        "растение",
+        "декор",
+        "горшок",
+        "листья"
+      ],
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-01T00:00:00.000Z",
+      "updatedAt": "2026-04-01T00:00:00.000Z"
+    },
+    {
+      "id": "8",
+      "sku": "ALP-OFFER-0008",
+      "title": "Декоративный куст, с шикарными листьями, горшком",
+      "description": "Декоративный куст для интерьера в горшке.",
+      "priceText": "2 000 руб.",
+      "size": "120 × 212 × 46",
+      "image": "assets/offers/offer8.png",
+      "badge": "Распродажа",
+      "showOnHome": true,
+      "homeOrder": 8,
+      "price": 2000,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Декор",
+      "categories": [
+        "Товары для дома",
+        "Декор"
+      ],
+      "tags": [
+        "декор",
+        "растение",
+        "куст"
+      ],
+      "images": [
+        "assets/offers/offer8.png"
+      ],
+      "attributes": {
+        "room": "Гостиная",
+        "material": "Искусственные материалы",
+        "color": "Зелёный",
+        "style": "Современный",
+        "size": "120 × 212 × 46"
+      },
+      "dimensions": {
+        "raw": "120 × 212 × 46"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Распродажа",
+      "searchKeywords": [
+        "куст",
+        "растение",
+        "декор",
+        "горшок",
+        "листья"
+      ],
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-01T00:00:00.000Z",
+      "updatedAt": "2026-04-01T00:00:00.000Z"
+    },
+    {
+      "id": "p-1001",
+      "sku": "ALP-SOFA-1001",
+      "title": "Диван MODENA",
+      "description": "Прямой диван с мягкой посадкой и съёмными подушками.",
+      "price": 129900,
+      "oldPrice": 159900,
+      "currency": "RUB",
+      "category": "Диваны",
+      "categories": [
+        "Мебель",
+        "Гостиная",
+        "Диваны"
+      ],
+      "tags": [
+        "диван",
+        "гостиная",
+        "ткань"
+      ],
+      "images": [
+        "assets/products/sofa-modena-1.png",
+        "assets/products/sofa-modena-2.png"
+      ],
+      "attributes": {
+        "room": "Гостиная",
+        "material": "Ткань",
+        "color": "Бежевый",
+        "style": "Современный",
+        "seats": 3,
+        "mechanism": "Еврокнижка"
+      },
+      "dimensions": {
+        "width": 230,
+        "depth": 98,
+        "height": 86,
+        "unit": "cm"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Скидка",
+      "searchKeywords": [
+        "modena",
+        "модена",
+        "диван",
+        "еврокнижка",
+        "бежевый",
+        "ткань",
+        "гостиная"
+      ],
+      "rating": {
+        "avg": 4.6,
+        "count": 5
+      },
+      "createdAt": "2026-04-01T10:00:00.000Z",
+      "updatedAt": "2026-04-01T10:00:00.000Z"
+    },
+    {
+      "id": "p-1002",
+      "sku": "ALP-CHAIR-1002",
+      "title": "Кресло ARONA",
+      "description": "Компактное кресло для чтения с высокой спинкой.",
+      "price": 88500,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Кресла",
+      "categories": [
+        "Мебель",
+        "Гостиная",
+        "Кресла"
+      ],
+      "tags": [
+        "кресло",
+        "arona",
+        "чтение"
+      ],
+      "images": [
+        "assets/furniture/armchair.png"
+      ],
+      "attributes": {
+        "room": "Гостиная",
+        "material": "Ткань",
+        "color": "Розовый",
+        "style": "Современный"
+      },
+      "dimensions": {
+        "width": 84,
+        "depth": 90,
+        "height": 104,
+        "unit": "cm"
+      },
+      "inStock": true,
+      "isPromo": false,
+      "promoLabel": null,
+      "searchKeywords": [
+        "arona",
+        "арона",
+        "кресло",
+        "розовый",
+        "гостиная"
+      ],
+      "rating": {
+        "avg": 4.2,
+        "count": 3
+      },
+      "createdAt": "2026-04-02T10:00:00.000Z",
+      "updatedAt": "2026-04-02T10:00:00.000Z"
+    },
+    {
+      "id": "p-1003",
+      "sku": "ALP-TABLE-1003",
+      "title": "Стол OAKLINE 140",
+      "description": "Обеденный стол из массива дуба.",
+      "price": 74900,
+      "oldPrice": 89900,
+      "currency": "RUB",
+      "category": "Столы",
+      "categories": [
+        "Мебель",
+        "Кухня",
+        "Столы"
+      ],
+      "tags": [
+        "стол",
+        "дуб",
+        "обеденный"
+      ],
+      "images": [
+        "assets/products/table-oakline-1.png"
+      ],
+      "attributes": {
+        "room": "Кухня",
+        "material": "Массив дуба",
+        "color": "Натуральный",
+        "shape": "Прямоугольный",
+        "seats": 6
+      },
+      "dimensions": {
+        "width": 140,
+        "depth": 80,
+        "height": 75,
+        "unit": "cm"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Акция",
+      "searchKeywords": [
+        "oakline",
+        "oak",
+        "дуб",
+        "стол",
+        "140",
+        "кухня",
+        "обеденный"
+      ],
+      "rating": {
+        "avg": 4.8,
+        "count": 8
+      },
+      "createdAt": "2026-04-03T10:00:00.000Z",
+      "updatedAt": "2026-04-03T10:00:00.000Z"
+    },
+    {
+      "id": "p-1004",
+      "sku": "ALP-CHAIR-1004",
+      "title": "Стул NORD",
+      "description": "Деревянный стул для кухни и столовой.",
+      "price": 12900,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Стулья",
+      "categories": [
+        "Мебель",
+        "Кухня",
+        "Стулья"
+      ],
+      "tags": [
+        "стул",
+        "дерево",
+        "сканди"
+      ],
+      "images": [
+        "assets/products/chair-nord-1.png"
+      ],
+      "attributes": {
+        "room": "Кухня",
+        "material": "Дерево",
+        "color": "Белый",
+        "style": "Скандинавский"
+      },
+      "dimensions": {
+        "width": 46,
+        "depth": 52,
+        "height": 82,
+        "unit": "cm"
+      },
+      "inStock": true,
+      "isPromo": false,
+      "promoLabel": null,
+      "searchKeywords": [
+        "nord",
+        "норд",
+        "стул",
+        "сканди",
+        "белый",
+        "кухня"
+      ],
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-04T10:00:00.000Z",
+      "updatedAt": "2026-04-04T10:00:00.000Z"
+    },
+    {
+      "id": "p-1005",
+      "sku": "ALP-BED-1005",
+      "title": "Кровать LUNA 160",
+      "description": "Кровать с мягким изголовьем, размер спального места 160×200.",
+      "price": 99900,
+      "oldPrice": 114900,
+      "currency": "RUB",
+      "category": "Кровати",
+      "categories": [
+        "Мебель",
+        "Спальня",
+        "Кровати"
+      ],
+      "tags": [
+        "кровать",
+        "160",
+        "спальня"
+      ],
+      "images": [
+        "assets/products/bed-luna-1.png"
+      ],
+      "attributes": {
+        "room": "Спальня",
+        "material": "Ткань",
+        "color": "Серый",
+        "style": "Современный",
+        "sleepSize": "160x200"
+      },
+      "dimensions": {
+        "width": 175,
+        "depth": 214,
+        "height": 110,
+        "unit": "cm"
+      },
+      "inStock": false,
+      "isPromo": true,
+      "promoLabel": "Скидка",
+      "searchKeywords": [
+        "luna",
+        "луна",
+        "кровать",
+        "160",
+        "200",
+        "мягкое изголовье",
+        "спальня"
+      ],
+      "rating": {
+        "avg": 4.4,
+        "count": 12
+      },
+      "createdAt": "2026-04-05T10:00:00.000Z",
+      "updatedAt": "2026-04-05T10:00:00.000Z"
+    },
+    {
+      "id": "p-1006",
+      "sku": "ALP-COMMODE-1006",
+      "title": "Комод LINE",
+      "description": "Комод с 4 ящиками для спальни.",
+      "price": 35900,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Комоды",
+      "categories": [
+        "Мебель",
+        "Спальня",
+        "Комоды"
+      ],
+      "tags": [
+        "комод",
+        "ящики",
+        "спальня"
+      ],
+      "images": [
+        "assets/products/commode-line-1.png"
+      ],
+      "attributes": {
+        "room": "Спальня",
+        "material": "ЛДСП",
+        "color": "Дуб",
+        "style": "Минимализм"
+      },
+      "dimensions": {
+        "width": 120,
+        "depth": 42,
+        "height": 86,
+        "unit": "cm"
+      },
+      "inStock": true,
+      "isPromo": false,
+      "promoLabel": null,
+      "searchKeywords": [
+        "line",
+        "лайн",
+        "комод",
+        "4 ящика",
+        "дуб",
+        "спальня"
+      ],
+      "rating": {
+        "avg": 4,
+        "count": 2
+      },
+      "createdAt": "2026-04-06T10:00:00.000Z",
+      "updatedAt": "2026-04-06T10:00:00.000Z"
+    },
+    {
+      "id": "p-1007",
+      "sku": "ALP-WARDROBE-1007",
+      "title": "Шкаф CITY 2D",
+      "description": "Двухдверный шкаф для одежды.",
+      "price": 55900,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Шкафы",
+      "categories": [
+        "Мебель",
+        "Прихожая",
+        "Шкафы"
+      ],
+      "tags": [
+        "шкаф",
+        "2 двери",
+        "прихожая"
+      ],
+      "images": [
+        "assets/products/wardrobe-city-1.png"
+      ],
+      "attributes": {
+        "room": "Прихожая",
+        "material": "ЛДСП",
+        "color": "Белый",
+        "style": "Современный"
+      },
+      "dimensions": {
+        "width": 90,
+        "depth": 55,
+        "height": 200,
+        "unit": "cm"
+      },
+      "inStock": true,
+      "isPromo": false,
+      "promoLabel": null,
+      "searchKeywords": [
+        "city",
+        "сити",
+        "шкаф",
+        "2d",
+        "белый",
+        "прихожая"
+      ],
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-07T10:00:00.000Z",
+      "updatedAt": "2026-04-07T10:00:00.000Z"
+    },
+    {
+      "id": "p-1008",
+      "sku": "ALP-SHELF-1008",
+      "title": "Стеллаж GRAPH",
+      "description": "Открытый стеллаж для хранения книг и декора.",
+      "price": 21900,
+      "oldPrice": 27900,
+      "currency": "RUB",
+      "category": "Стеллажи",
+      "categories": [
+        "Мебель",
+        "Гостиная",
+        "Стеллажи"
+      ],
+      "tags": [
+        "стеллаж",
+        "книги",
+        "декор"
+      ],
+      "images": [
+        "assets/products/shelf-graph-1.png"
+      ],
+      "attributes": {
+        "room": "Гостиная",
+        "material": "Металл/ЛДСП",
+        "color": "Чёрный",
+        "style": "Лофт"
+      },
+      "dimensions": {
+        "width": 80,
+        "depth": 30,
+        "height": 180,
+        "unit": "cm"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Акция",
+      "searchKeywords": [
+        "graph",
+        "граф",
+        "стеллаж",
+        "лофт",
+        "черный",
+        "гостиная"
+      ],
+      "rating": {
+        "avg": 4.7,
+        "count": 6
+      },
+      "createdAt": "2026-04-08T10:00:00.000Z",
+      "updatedAt": "2026-04-08T10:00:00.000Z"
+    },
+    {
+      "id": "p-1009",
+      "sku": "ALP-DESK-1009",
+      "title": "Письменный стол WORK",
+      "description": "Стол для домашнего офиса с кабель-каналом.",
+      "price": 29900,
+      "oldPrice": null,
+      "currency": "RUB",
+      "category": "Столы",
+      "categories": [
+        "Мебель",
+        "Кабинет",
+        "Столы"
+      ],
+      "tags": [
+        "стол",
+        "офис",
+        "кабель"
+      ],
+      "images": [
+        "assets/products/desk-work-1.png"
+      ],
+      "attributes": {
+        "room": "Кабинет",
+        "material": "ЛДСП",
+        "color": "Орех",
+        "style": "Минимализм"
+      },
+      "dimensions": {
+        "width": 120,
+        "depth": 60,
+        "height": 75,
+        "unit": "cm"
+      },
+      "inStock": true,
+      "isPromo": false,
+      "promoLabel": null,
+      "searchKeywords": [
+        "work",
+        "ворк",
+        "письменный",
+        "стол",
+        "кабинет",
+        "офис",
+        "120"
+      ],
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-09T10:00:00.000Z",
+      "updatedAt": "2026-04-09T10:00:00.000Z"
+    },
+    {
+      "id": "p-1010",
+      "sku": "ALP-LAMP-1010",
+      "title": "Настольная лампа DOT",
+      "description": "Лампа для рабочего стола с тёплым светом.",
+      "price": 6900,
+      "oldPrice": 8900,
+      "currency": "RUB",
+      "category": "Освещение",
+      "categories": [
+        "Товары для дома",
+        "Освещение"
+      ],
+      "tags": [
+        "лампа",
+        "свет",
+        "настольная"
+      ],
+      "images": [
+        "assets/products/lamp-dot-1.png"
+      ],
+      "attributes": {
+        "room": "Кабинет",
+        "material": "Металл",
+        "color": "Белый",
+        "style": "Современный",
+        "power": "8W"
+      },
+      "dimensions": {
+        "width": 16,
+        "depth": 16,
+        "height": 42,
+        "unit": "cm"
+      },
+      "inStock": true,
+      "isPromo": true,
+      "promoLabel": "Скидка",
+      "searchKeywords": [
+        "dot",
+        "дот",
+        "лампа",
+        "освещение",
+        "настольная",
+        "белый",
+        "кабинет"
+      ],
+      "rating": {
+        "avg": 4.1,
+        "count": 9
+      },
+      "createdAt": "2026-04-10T10:00:00.000Z",
+      "updatedAt": "2026-04-10T10:00:00.000Z"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "r-2001",
+      "productId": "p-1001",
+      "rating": 5,
+      "title": "Отличный диван",
+      "text": "Привезли быстро, ткань приятная, удобная посадка.",
+      "pros": [
+        "комфорт",
+        "качество ткани"
+      ],
+      "cons": [
+        ""
+      ],
+      "authorName": "Мария",
+      "status": "approved",
+      "createdAt": "2026-04-12T12:00:00.000Z",
+      "updatedAt": "2026-04-12T12:00:00.000Z"
+    },
+    {
+      "id": "r-2002",
+      "productId": "p-1001",
+      "rating": 4,
+      "title": "Хороший, но крупный",
+      "text": "В целом классный, но занимет много места.",
+      "pros": [
+        "удобный"
+      ],
+      "cons": [
+        "габариты"
+      ],
+      "authorName": "Илья",
+      "status": "pending",
+      "createdAt": "2026-04-13T12:00:00.000Z",
+      "updatedAt": "2026-04-13T12:00:00.000Z"
+    },
+    {
+      "id": "r-2003",
+      "productId": "p-1003",
+      "rating": 5,
+      "title": "Стол супер",
+      "text": "Дуб, тяжёлый, выглядит дорого.",
+      "pros": [
+        "массив",
+        "устойчивый"
+      ],
+      "cons": [
+        ""
+      ],
+      "authorName": "Светлана",
+      "status": "hidden",
+      "createdAt": "2026-04-14T12:00:00.000Z",
+      "updatedAt": "2026-04-14T12:00:00.000Z"
+    }
+  ],
   "orders": [],
   "guest": {
     "id": 1,
@@ -195,9 +1174,9 @@
   },
   "session": {
     "id": 1,
-    "role": null,
-    "userId": null,
-    "login": null,
-    "createdAt": null
+    "role": "user",
+    "userId": "7fc31798-cd1f-41ee-8cf9-cf8c2ac9386f",
+    "login": "Лиза2",
+    "createdAt": "2026-04-27T12:47:14.948Z"
   }
 }
