@@ -58,10 +58,24 @@ export function initProductCreate() {
     void (async () => {
       const formData = new FormData(form);
       const title = String(formData.get("title") ?? "");
+      const description = String(formData.get("description") ?? "");
       const price = String(formData.get("price") ?? "");
+      const oldPrice = String(formData.get("oldPrice") ?? "");
       const image = String(formData.get("image") ?? "");
+      const categories = String(formData.get("categories") ?? "");
+      const tags = String(formData.get("tags") ?? "");
+      const attributesRaw = String(formData.get("attributes") ?? "");
 
-      const result = await addProduct({ title, price, image });
+      const result = await addProduct({
+        title,
+        description,
+        price,
+        oldPrice,
+        image,
+        categories,
+        tags,
+        attributes: attributesRaw,
+      });
       if (!result.ok) {
         if (error) error.textContent = result.message;
         return;

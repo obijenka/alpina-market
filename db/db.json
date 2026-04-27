@@ -1108,6 +1108,44 @@
       },
       "createdAt": "2026-04-10T10:00:00.000Z",
       "updatedAt": "2026-04-10T10:00:00.000Z"
+    },
+    {
+      "id": "5a5d9268-a5d4-4212-a469-afc689b38ca4",
+      "sku": "",
+      "title": "Стул MONO",
+      "description": "Минималистичный стул для кухни и гостиной. Лёгкий, прочный, удобная посадка.",
+      "price": 4990,
+      "oldPrice": 6990,
+      "currency": "RUB",
+      "category": "тумбы",
+      "categories": [
+        "тумбы",
+        "гостиная"
+      ],
+      "tags": [
+        "тумба",
+        "тв",
+        "дерево"
+      ],
+      "image": "https://dsv-mebel.ru/mebel/stulya-kanczler/",
+      "images": [
+        "https://dsv-mebel.ru/mebel/stulya-kanczler/"
+      ],
+      "attributes": {
+        "color": "белый",
+        "material": "мдф",
+        "width": 120
+      },
+      "inStock": true,
+      "showOnHome": false,
+      "homeOrder": 0,
+      "badge": "",
+      "rating": {
+        "avg": 0,
+        "count": 0
+      },
+      "createdAt": "2026-04-27T15:09:26.723Z",
+      "updatedAt": "2026-04-27T15:09:26.723Z"
     }
   ],
   "reviews": [

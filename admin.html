@@ -55,13 +55,38 @@
                   </label>
 
                   <label class="admin-field">
+                    <div class="admin-field__label">Описание</div>
+                    <textarea class="admin-field__input" name="description" rows="4"></textarea>
+                  </label>
+
+                  <label class="admin-field">
                     <div class="admin-field__label">Цена</div>
                     <input class="admin-field__input" type="text" name="price" required />
                   </label>
 
                   <label class="admin-field">
+                    <div class="admin-field__label">Старая цена</div>
+                    <input class="admin-field__input" type="text" name="oldPrice" />
+                  </label>
+
+                  <label class="admin-field">
                     <div class="admin-field__label">Картинка (URL/путь)</div>
                     <input class="admin-field__input" type="text" name="image" />
+                  </label>
+
+                  <label class="admin-field">
+                    <div class="admin-field__label">Категории (через запятую, с маленькой буквы)</div>
+                    <input class="admin-field__input" type="text" name="categories" />
+                  </label>
+
+                  <label class="admin-field">
+                    <div class="admin-field__label">Теги (через запятую)</div>
+                    <input class="admin-field__input" type="text" name="tags" />
+                  </label>
+
+                  <label class="admin-field">
+                    <div class="admin-field__label">Attributes (JSON)</div>
+                    <textarea class="admin-field__input" name="attributes" rows="6"></textarea>
                   </label>
 
                   <div class="admin-form__error" id="adminCreateProductError"></div>
