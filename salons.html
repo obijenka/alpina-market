@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Наши салоны</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/auth-modal.css" />
+    <link rel="stylesheet" href="css/salons.css" />
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="header__top">
+        <div class="container header__top-inner">
+          <button class="header__city" type="button">
+            Санкт-Петербург
+            <img class="header__chevron" src="assets/icons/chevron.svg" alt="chevron" />
+          </button>
+
+          <nav class="header__top-nav" aria-label="Верхнее меню">
+            <a class="header__top-link" href="#">О нас</a>
+            <a class="header__top-link" href="salons.html">Наши салоны</a>
+            <a class="header__top-link" href="#" id="bookingAction">Онлайн-запись</a>
+            <a class="header__top-link" href="faq.html">Вопросы и ответы</a>
+          </nav>
+
+          <button class="header__burger" type="button" aria-label="Открыть меню">
+            <span class="header__burger-line"></span>
+            <span class="header__burger-line"></span>
+            <span class="header__burger-line"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="header__main">
+        <div class="container header__main-inner">
+          <a class="header__logo" href="index.html" aria-label="Alpina Market">
+            <img src="assets/logo.svg" alt="alpina market" />
+          </a>
+
+          <form class="header__search" role="search" action="search.html" method="get">
+            <input class="header__search-input" type="search" name="q" placeholder="Белый стул" />
+            <button class="header__search-btn" type="submit" aria-label="Поиск">
+              <img src="assets/icons/search.svg" alt="Поиск" />
+            </button>
+          </form>
+
+          <div class="header__contacts">
+            <a class="header__phone" href="tel:+78007004024">8 800 700 40 24</a>
+            <button class="header__callback" type="button">
+              Позвонить или написать
+              <img class="header__chevron" src="assets/icons/chevron.svg" alt="chevron" />
+            </button>
+          </div>
+
+          <div class="header__actions" aria-label="Действия">
+            <a class="header__action" id="profileAction" href="#" aria-label="Профиль">
+              <img width="18" height="18" src="assets/icons/user.svg" alt="" />
+            </a>
+            <a class="header__action" href="#" aria-label="Сообщения">
+              <img width="18" height="18" src="assets/icons/message.svg" alt="" />
+            </a>
+            <a class="header__action" id="favoritesAction" href="favorites.html" aria-label="Избранное">
+              <img width="20" height="16" src="assets/icons/fav.svg" alt="" />
+            </a>
+            <a class="header__action" id="cartAction" href="cart.html" aria-label="Корзина">
+              <img width="14" height="18" src="assets/icons/cart.svg" alt="" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="header__bottom">
+        <div class="container header__bottom-inner">
+          <nav class="header__menu" aria-label="Каталог">
+            <a class="header__menu-link header__menu-link--catalog" href="catalog.html">Каталог</a>
+            <a class="header__menu-link" href="#">Каталог по комнатам</a>
+            <a class="header__menu-link" href="#">Дизайн-проекты</a>
+            <a class="header__menu-link" href="#">Мебель на заказ</a>
+          </nav>
+
+          <nav class="header__submenu" aria-label="Разделы каталога">
+            <a class="header__submenu-link" href="catalog.html">Мебель</a>
+            <a class="header__submenu-link" href="catalog.html">Мебельная фурнитура и комплектующие</a>
+            <a class="header__submenu-link" href="catalog.html">Товары для дома</a>
+            <a class="header__submenu-link" href="catalog.html">Плитка, керамогранит и мозаика</a>
+            <a class="header__submenu-link" href="catalog.html">Акции</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="salons-page">
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-head__title">Наши салоны</h2>
+          </div>
+
+          <p class="salons-page__intro">
+            На карте отмечены салоны «Alpina» в Минске.
+          </p>
+
+          <section class="salons-page__map" aria-label="Карта салонов">
+            <div id="salonsMap" class="salons-page__map-frame"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" aria-label="Подвал">
+      <div class="footer__top">
+        <div class="container footer__top-inner">
+          <div class="footer__col footer__links">
+            <div class="footer__title">Каталог</div>
+            <a class="footer__link" href="catalog.html">Мебель</a>
+            <a class="footer__link" href="catalog.html">Товары для дома</a>
+            <a class="footer__link" href="catalog.html">Плитка, керамогранит и мозаика</a>
+            <a class="footer__link" href="catalog.html">Акции</a>
+          </div>
+
+          <div class="footer__col footer__links">
+            <div class="footer__title">Покупателям</div>
+            <a class="footer__link" href="#">Доставка</a>
+            <a class="footer__link" href="#">Оплата</a>
+            <a class="footer__link" href="#">Гарантия</a>
+            <a class="footer__link" href="#">Возврат</a>
+          </div>
+
+          <div class="footer__col footer__contacts">
+            <div class="footer__title">Контакты</div>
+            <a class="footer__contact" href="tel:+78007004024">8 800 700 40 24</a>
+            <a class="footer__contact" href="#">info@alpina-market.ru</a>
+            <div class="footer__contact-note">Звонок по России бесплатный.</div>
+            <div class="footer__contact-note">Режим работы: с 02:00 до 23:00 (МСК).</div>
+            <div class="footer__social">
+              <div class="footer__social-label">Присоединяйтесь к нам в социальных сетях</div>
+              <div class="footer__social-icons">
+                <a class="footer__social-link" href="#" aria-label="YouTube">
+                  <img width="16px" height="16px" src="assets/footer/youtube.svg" alt="" />
+                </a>
+                <a class="footer__social-link" href="#" aria-label="Instagram">
+                  <img width="16px" height="16px" src="assets/footer/instagram.svg" alt="" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer__col footer__pay">
+            <div class="footer__title footer__title-cards">Мы принимаем к оплате</div>
+            <div class="footer__cards"><img src="assets/footer/cards.png" alt="" /></div>
+            <div class="footer__feedback">
+              <div class="footer__feedback-label">Нам важно ваше мнение</div>
+              <a class="footer__btn" href="#">Написать нам</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <div class="container footer__bottom-inner">
+          <div class="footer__info">
+            <div class="footer__copy">© 2020 Rendement. All rights reserved</div>
+            <a class="footer__privacy" href="#">Политика конфиденциальности</a>
+          </div>
+
+          <div class="footer__dev">Developed by Legacystudio</div>
+        </div>
+      </div>
+    </footer>
+
+    <div class="mobile-menu">
+      <div class="mobile-menu__overlay" data-menu-close></div>
+      <div class="mobile-menu__panel">
+        <div class="mobile-menu__head">
+          <div class="mobile-menu__title">Меню</div>
+          <button class="mobile-menu__close" type="button" data-menu-close aria-label="Закрыть">×</button>
+        </div>
+
+        <nav class="mobile-menu__nav" aria-label="Меню">
+          <a class="mobile-menu__link" href="index.html">Главная</a>
+          <a class="mobile-menu__link" href="catalog.html">Каталог</a>
+          <a class="mobile-menu__link" href="salons.html">Наши салоны</a>
+          <a class="mobile-menu__link" href="faq.html">Вопросы и ответы</a>
+          <a class="mobile-menu__link" href="profile.html">Профиль</a>
+          <a class="mobile-menu__link" href="favorites.html">Избранное</a>
+          <a class="mobile-menu__link" href="cart.html">Корзина</a>
+        </nav>
+      </div>
+    </div>
+
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+    <script type="module" src="js/pages/salons.js"></script>
+  </body>
+</html>
