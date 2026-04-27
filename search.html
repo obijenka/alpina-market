@@ -1,16 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Товар — Alpina Market</title>
+    <title>Поиск</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/auth-modal.css" />
-    <link rel="stylesheet" href="css/product.css" />
   </head>
 
   <body>
@@ -25,7 +24,7 @@
           <nav class="header__top-nav" aria-label="Верхнее меню">
             <a class="header__top-link" href="#">О нас</a>
             <a class="header__top-link" href="#">Наши салоны</a>
-            <a class="header__top-link" id="bookingAction" href="#">Онлайн-запись</a>
+            <a class="header__top-link" href="#" id="bookingAction">Онлайн-запись</a>
             <a class="header__top-link" href="faq.html">Вопросы и ответы</a>
           </nav>
 
@@ -99,12 +98,12 @@
       <section class="offers">
         <div class="container">
           <div class="section-head">
-            <h2 id="productTitle" class="section-head__title">Товар</h2>
+            <h2 class="section-head__title">Поиск</h2>
           </div>
 
-          <div id="productError" style="display:none; padding: 18px 0;">Товар не найден.</div>
-
-          <div id="productRoot"></div>
+          <div id="searchMeta" style="padding: 6px 0; opacity: .75;"></div>
+          <div id="searchEmpty" style="display: none; padding: 18px 0;">Ничего не найдено.</div>
+          <div class="offers__grid" id="searchGrid"></div>
         </div>
       </section>
     </main>
@@ -140,6 +139,6 @@
       </div>
     </div>
 
-    <script type="module" src="js/pages/product.js"></script>
+    <script type="module" src="js/pages/search.js"></script>
   </body>
 </html>
