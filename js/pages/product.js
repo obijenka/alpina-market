@@ -1,5 +1,14 @@
 import { initAuthModal, openAuthModal } from "../auth/authModal.js";
-import { addOfferToCart, getCartItems, getProductById, getSession, getWishlistOfferIds, toggleWishlistOffer } from "../services/index.js";
+import {
+  addOfferToCart,
+  addReview,
+  getCartItems,
+  getProductById,
+  getReviews,
+  getSession,
+  getWishlistOfferIds,
+  toggleWishlistOffer,
+} from "../services/index.js";
 
 function formatRub(value) {
   const num = Number(value);
@@ -11,6 +20,190 @@ function getQueryParam(name) {
   const url = new URL(window.location.href);
   const v = url.searchParams.get(name);
   return v ? String(v).trim() : "";
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function renderStars(rating, { readonly = true } = {}) {
+  const r = Math.max(0, Math.min(5, Number(rating ?? 0)));
+  const stars = Array.from({ length: 5 }).map((_, idx) => {
+    const active = idx < Math.round(r);
+    const src = active ? "assets/icons/star-yellow.png" : "assets/icons/star.png";
+    return `<span class="review-star" aria-hidden="true"><img src="${src}" alt="" /></span>`;
+  });
+  return `<div class="review-stars${readonly ? " is-readonly" : ""}" aria-label="Оценка">${stars.join("")}</div>`;
+}
+
+function formatReviewDate(value) {
+  const d = value ? new Date(value) : null;
+  if (!d || Number.isNaN(d.getTime())) return "";
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(d);
+}
+
+function renderReviewsList(reviews, rootEl) {
+  if (!rootEl) return;
+  const items = Array.isArray(reviews) ? reviews : [];
+
+  rootEl.innerHTML = items
+    .map((r) => {
+      const text = escapeHtml(r.text ?? "");
+      const author = escapeHtml(r.authorLogin ?? r.authorName ?? "");
+      const rating = Number(r.rating ?? 0);
+      const createdAt = escapeHtml(formatReviewDate(r.createdAt));
+
+      return `
+        <article style="border:1px solid rgba(0,0,0,.08); border-radius: 12px; padding: 12px 14px;">
+          <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <div>${renderStars(rating)}</div>
+          </div>
+          <div class="review-meta">${author ? author : "—"}${createdAt ? ` · ${createdAt}` : ""}</div>
+          <div style="padding-top:10px;">${text}</div>
+        </article>
+      `.trim();
+    })
+    .join("");
+}
+
+function initReviewStarsPicker() {
+  const widget = document.querySelector("[data-review-stars]");
+  const form = document.getElementById("reviewForm");
+  if (!(widget instanceof HTMLElement) || !(form instanceof HTMLFormElement)) return;
+
+  const ratingInput = form.elements.namedItem("rating");
+  if (!(ratingInput instanceof HTMLInputElement)) return;
+
+  let current = Number(ratingInput.value);
+  if (!Number.isFinite(current) || current < 1 || current > 5) current = 0;
+
+  function setValue(next) {
+    const v = Number(next);
+    if (!Number.isFinite(v) || v < 1 || v > 5) return;
+    ratingInput.value = String(v);
+    render(v);
+  }
+
+  function render(value) {
+    const v = Math.max(0, Math.min(5, Number(value ?? 0)));
+    widget.innerHTML = Array.from({ length: 5 })
+      .map((_, idx) => {
+        const n = idx + 1;
+        const active = idx < v;
+        const src = active ? "assets/icons/star-yellow.png" : "assets/icons/star.png";
+        return `<button class="review-star" type="button" data-star-value="${n}" aria-label="${n}"><img src="${src}" alt="" /></button>`;
+      })
+      .join("");
+  }
+
+  render(current);
+
+  widget.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+    const btn = target.closest("[data-star-value]");
+    if (!(btn instanceof HTMLElement)) return;
+    const v = Number(btn.getAttribute("data-star-value"));
+    setValue(v);
+  });
+}
+
+async function loadAndRenderReviews(productId) {
+  const listEl = document.getElementById("reviewsList");
+  const emptyEl = document.getElementById("reviewsEmpty");
+
+  try {
+    const reviews = await getReviews({ productId, status: "approved" });
+    const items = Array.isArray(reviews) ? reviews : [];
+    renderReviewsList(items, listEl);
+    if (emptyEl) {
+      emptyEl.textContent = items.length === 0 ? "Отзывов пока нет." : "";
+      emptyEl.style.display = items.length === 0 ? "block" : "none";
+    }
+  } catch {
+    if (listEl) listEl.innerHTML = "";
+    if (emptyEl) {
+      emptyEl.textContent = "Не удалось загрузить отзывы.";
+      emptyEl.style.display = "block";
+    }
+  }
+}
+
+function initReviewAccordion() {
+  const toggles = document.querySelectorAll("[data-review-toggle]");
+  if (toggles.length === 0) return;
+
+  toggles.forEach((btn) => {
+    if (!(btn instanceof HTMLButtonElement)) return;
+
+    btn.addEventListener("click", () => {
+      const item = btn.closest("[data-review-item]");
+      if (!(item instanceof HTMLElement)) return;
+
+      const body = item.querySelector("[data-review-body]");
+      if (!(body instanceof HTMLElement)) return;
+
+      const isOpen = item.classList.contains("is-open");
+      const nextOpen = !isOpen;
+
+      if (nextOpen) {
+        item.classList.add("is-open");
+        btn.setAttribute("aria-expanded", "true");
+        body.style.height = "0px";
+        const targetHeight = body.scrollHeight;
+
+        requestAnimationFrame(() => {
+          body.style.height = `${targetHeight}px`;
+        });
+
+        const onEnd = (e) => {
+          if (e.propertyName !== "height") return;
+          body.style.height = "auto";
+          body.removeEventListener("transitionend", onEnd);
+        };
+
+        body.addEventListener("transitionend", onEnd);
+        return;
+      }
+
+      const currentHeight = body.scrollHeight;
+      body.style.height = `${currentHeight}px`;
+      requestAnimationFrame(() => {
+        body.style.height = "0px";
+      });
+
+      const onEnd = (e) => {
+        if (e.propertyName !== "height") return;
+        item.classList.remove("is-open");
+        btn.setAttribute("aria-expanded", "false");
+        body.removeEventListener("transitionend", onEnd);
+      };
+
+      body.addEventListener("transitionend", onEnd);
+    });
+  });
+
+  document.querySelectorAll("[data-review-item]").forEach((item) => {
+    if (!(item instanceof HTMLElement)) return;
+    const btn = item.querySelector("[data-review-toggle]");
+    const body = item.querySelector("[data-review-body]");
+    if (!(btn instanceof HTMLElement) || !(body instanceof HTMLElement)) return;
+
+    const expanded = btn.getAttribute("aria-expanded") === "true";
+    item.classList.toggle("is-open", expanded);
+    body.style.height = expanded ? "auto" : "0px";
+  });
 }
 
 function renderProduct(product, rootEl) {
@@ -141,6 +334,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (renderedId) {
       await syncFavButton(rootEl, renderedId);
       await syncBuyButton(rootEl, renderedId);
+      await loadAndRenderReviews(renderedId);
 
       rootEl.addEventListener("click", (e) => {
         void (async () => {
@@ -169,9 +363,43 @@ document.addEventListener("DOMContentLoaded", () => {
         })();
       });
     }
+
+    const reviewForm = document.getElementById("reviewForm");
+    const reviewError = document.getElementById("reviewFormError");
+    if (reviewForm instanceof HTMLFormElement && renderedId) {
+      reviewForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        void (async () => {
+          const session = await getSession();
+          if (session?.role !== "user") {
+            openAuthModal();
+            return;
+          }
+
+          const fd = new FormData(reviewForm);
+          const rating = Number(fd.get("rating"));
+          const text = String(fd.get("text") ?? "").trim();
+
+          const result = await addReview({ productId: renderedId, rating, text });
+          if (!result.ok) {
+            if (reviewError) reviewError.textContent = result.message;
+            return;
+          }
+
+          if (reviewError) reviewError.textContent = "";
+          reviewForm.reset();
+          const ratingEl = reviewForm.elements.namedItem("rating");
+          if (ratingEl instanceof HTMLInputElement) ratingEl.value = "";
+          initReviewStarsPicker();
+        })();
+      });
+    }
   })();
 
   initAuthModal();
+
+  initReviewAccordion();
+  initReviewStarsPicker();
 
   const profileAction = document.querySelector("#profileAction");
   if (profileAction) {

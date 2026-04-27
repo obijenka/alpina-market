@@ -196,11 +196,11 @@
         "листья"
       ],
       "rating": {
-        "avg": 0,
-        "count": 0
+        "avg": 5,
+        "count": 1
       },
       "createdAt": "2026-04-01T00:00:00.000Z",
-      "updatedAt": "2026-04-01T00:00:00.000Z"
+      "updatedAt": "2026-04-27T14:44:40.942Z"
     },
     {
       "id": "2",
@@ -250,11 +250,11 @@
         "листья"
       ],
       "rating": {
-        "avg": 0,
-        "count": 0
+        "avg": 2,
+        "count": 1
       },
       "createdAt": "2026-04-01T00:00:00.000Z",
-      "updatedAt": "2026-04-01T00:00:00.000Z"
+      "updatedAt": "2026-04-27T14:40:23.865Z"
     },
     {
       "id": "3",
@@ -630,11 +630,11 @@
         "гостиная"
       ],
       "rating": {
-        "avg": 4.6,
-        "count": 5
+        "avg": 4.5,
+        "count": 2
       },
       "createdAt": "2026-04-01T10:00:00.000Z",
-      "updatedAt": "2026-04-01T10:00:00.000Z"
+      "updatedAt": "2026-04-27T14:43:17.506Z"
     },
     {
       "id": "p-1002",
@@ -735,11 +735,11 @@
         "обеденный"
       ],
       "rating": {
-        "avg": 4.8,
-        "count": 8
+        "avg": 5,
+        "count": 1
       },
       "createdAt": "2026-04-03T10:00:00.000Z",
-      "updatedAt": "2026-04-03T10:00:00.000Z"
+      "updatedAt": "2026-04-27T14:40:44.730Z"
     },
     {
       "id": "p-1004",
@@ -1127,7 +1127,7 @@
       "authorName": "Мария",
       "status": "approved",
       "createdAt": "2026-04-12T12:00:00.000Z",
-      "updatedAt": "2026-04-12T12:00:00.000Z"
+      "updatedAt": "2026-04-27T14:43:17.423Z"
     },
     {
       "id": "r-2002",
@@ -1142,9 +1142,9 @@
         "габариты"
       ],
       "authorName": "Илья",
-      "status": "pending",
+      "status": "approved",
       "createdAt": "2026-04-13T12:00:00.000Z",
-      "updatedAt": "2026-04-13T12:00:00.000Z"
+      "updatedAt": "2026-04-27T14:40:37.219Z"
     },
     {
       "id": "r-2003",
@@ -1160,9 +1160,31 @@
         ""
       ],
       "authorName": "Светлана",
-      "status": "hidden",
+      "status": "approved",
       "createdAt": "2026-04-14T12:00:00.000Z",
-      "updatedAt": "2026-04-14T12:00:00.000Z"
+      "updatedAt": "2026-04-27T14:40:44.645Z"
+    },
+    {
+      "id": "906912c6-127d-4d70-9ee4-41b5daecf245",
+      "productId": "2",
+      "rating": 2,
+      "text": "очень крутой товар",
+      "authorId": "7fc31798-cd1f-41ee-8cf9-cf8c2ac9386f",
+      "authorLogin": "Лиза2",
+      "status": "approved",
+      "createdAt": "2026-04-27T14:36:59.350Z",
+      "updatedAt": "2026-04-27T14:40:23.773Z"
+    },
+    {
+      "id": "1598d8a5-5c62-4974-825c-48691f5d89f8",
+      "productId": "1",
+      "rating": 5,
+      "text": "классный диван",
+      "authorId": "7fc31798-cd1f-41ee-8cf9-cf8c2ac9386f",
+      "authorLogin": "Лиза2",
+      "status": "approved",
+      "createdAt": "2026-04-27T14:44:22.821Z",
+      "updatedAt": "2026-04-27T14:44:40.857Z"
     }
   ],
   "orders": [],
@@ -1174,9 +1196,9 @@
   },
   "session": {
     "id": 1,
-    "role": "user",
-    "userId": "7fc31798-cd1f-41ee-8cf9-cf8c2ac9386f",
-    "login": "Лиза2",
-    "createdAt": "2026-04-27T12:47:14.948Z"
+    "role": null,
+    "userId": null,
+    "login": null,
+    "createdAt": null
   }
 }

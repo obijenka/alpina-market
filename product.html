@@ -102,14 +102,102 @@
             <h2 id="productTitle" class="section-head__title">Товар</h2>
           </div>
 
-          <div id="productError" style="display:none; padding: 18px 0;">Товар не найден.</div>
+          <div id="productError" class="product-error">Товар не найден.</div>
 
           <div id="productRoot"></div>
+
+          <div id="productReviews" class="product-reviews">
+            <div class="section-head product-reviews__head">
+              <h2 class="section-head__title">Отзывы</h2>
+            </div>
+
+            <div id="reviewsList" class="reviews-list"></div>
+            <div id="reviewsEmpty" class="reviews-empty">Отзывов пока нет.</div>
+
+            <div class="review-accordion review-accordion--spaced">
+              <div class="review-item" data-review-item>
+                <button class="review-item__head" type="button" data-review-toggle aria-expanded="false">
+                  <span class="review-item__title">Оставить отзыв</span>
+                  <span class="review-item__meta" aria-live="polite"></span>
+                  <span class="review-item__chev" aria-hidden="true"></span>
+                </button>
+                <div class="review-item__body" data-review-body>
+                  <div class="review-item__content">
+                    <form id="reviewForm" class="auth-form" autocomplete="off">
+                      <label class="auth-field">
+                        <div class="auth-field__label">Оценка</div>
+                        <div class="review-stars" data-review-stars aria-label="Оценка"></div>
+                        <input type="hidden" name="rating" required />
+                      </label>
+
+                      <label class="auth-field">
+                        <div class="auth-field__label">Текст</div>
+                        <textarea class="auth-field__input" name="text" rows="4" required></textarea>
+                      </label>
+
+                      <div class="auth-form__error" id="reviewFormError"></div>
+
+                      <button class="auth-form__btn" type="submit">Отправить</button>
+                      <div class="review-form-note">Отзыв появится после модерации.</div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
     <footer class="footer" aria-label="Подвал">
+      <div class="footer__top">
+        <div class="container footer__top-inner">
+          <div class="footer__col footer__links">
+            <div class="footer__title">Каталог</div>
+            <a class="footer__link" href="#">Мебель</a>
+            <a class="footer__link" href="#">Товары для дома</a>
+            <a class="footer__link" href="#">Плитка, керамогранит и мозаика</a>
+            <a class="footer__link" href="#">Акции</a>
+          </div>
+
+          <div class="footer__col footer__links">
+            <div class="footer__title">Покупателям</div>
+            <a class="footer__link" href="#">Доставка</a>
+            <a class="footer__link" href="#">Оплата</a>
+            <a class="footer__link" href="#">Гарантия</a>
+            <a class="footer__link" href="#">Возврат</a>
+          </div>
+
+          <div class="footer__col footer__contacts">
+            <div class="footer__title">Контакты</div>
+            <a class="footer__contact" href="tel:+78007004024">8 800 700 40 24</a>
+            <a class="footer__contact" href="#">info@alpina-market.ru</a>
+            <div class="footer__contact-note">Звонок по России бесплатный.</div>
+            <div class="footer__contact-note">Режим работы: с 02:00 до 23:00 (МСК).</div>
+            <div class="footer__social">
+              <div class="footer__social-label">Присоединяйтесь к нам в социальных сетях</div>
+              <div class="footer__social-icons">
+                <a class="footer__social-link" href="#" aria-label="YouTube">
+                  <img width="16px" height="16px" src="assets/footer/youtube.svg" alt="" />
+                </a>
+                <a class="footer__social-link" href="#" aria-label="Instagram">
+                  <img width="16px" height="16px" src="assets/footer/instagram.svg" alt="" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer__col footer__pay">
+            <div class="footer__title footer__title-cards">Мы принимаем к оплате</div>
+            <div class="footer__cards"><img src="assets/footer/cards.png" alt="" /></div>
+            <div class="footer__feedback">
+              <div class="footer__feedback-label">Нам важно ваше мнение</div>
+              <a class="footer__btn" href="#">Написать нам</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="footer__bottom">
         <div class="container footer__bottom-inner">
           <div class="footer__info">

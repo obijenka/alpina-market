@@ -9,6 +9,7 @@
   display: grid;
   gap: 12px;
   justify-items: center;
+  background-color: #F6F6F6;
 }
 
 .product-main-image {
@@ -41,12 +42,6 @@
 .product-fav img {
   width: 20px;
   height: 16px;
-  display: block;
-}
-
-.product-main-image img {
-  width: 100%;
-  height: auto;
   display: block;
 }
 
@@ -100,6 +95,140 @@
 .product-attrs {
   margin-top: 18px;
   width: 100%;
+}
+
+.product-error {
+  display: none;
+  padding: 18px 0;
+}
+
+.product-reviews {
+  padding: 18px 0;
+}
+
+.product-reviews__head {
+  margin-top: 18px;
+}
+
+.reviews-list {
+  display: grid;
+  gap: 12px;
+}
+
+.reviews-empty {
+  display: none;
+  padding: 12px 0;
+  opacity: 0.75;
+}
+
+.review-accordion--spaced {
+  margin-top: 18px;
+}
+
+.review-form-note {
+  opacity: 0.75;
+  padding-top: 8px;
+}
+
+.review-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 6px;
+}
+
+.review-star {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.review-star img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.review-stars.is-readonly .review-star {
+  cursor: default;
+}
+
+.review-meta {
+  opacity: 0.75;
+  padding-top: 6px;
+}
+
+.review-accordion {
+  display: grid;
+  gap: 12px;
+}
+
+.review-item {
+  border: 1px solid #e7e7e7;
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.review-item__head {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 18px;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.review-item__title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.review-item__meta {
+  font-size: 12px;
+  color: #2e7d32;
+  min-height: 16px;
+}
+
+.review-item__chev {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  position: relative;
+  transition: transform 220ms ease;
+}
+
+.review-item__chev::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid #111;
+  border-bottom: 2px solid #111;
+  transform: rotate(45deg);
+}
+
+.review-item.is-open .review-item__chev {
+  transform: rotate(180deg);
+}
+
+.review-item__body {
+  height: 0;
+  overflow: hidden;
+  transition: height 220ms ease;
+}
+
+.review-item__content {
+  padding: 0 14px 14px;
 }
 
 @media (max-width: 900px) {
