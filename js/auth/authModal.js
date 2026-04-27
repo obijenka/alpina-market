@@ -1,9 +1,8 @@
 import {
   addUser,
-  createSessionForUser,
   loginAdmin,
   loginUser,
-} from "../services/storage.js";
+} from "../services/index.js";
 import { mountAuthModalMarkup } from "./authModalMarkup.js";
 
 function getEls() {
@@ -98,7 +97,7 @@ function initLoginForm() {
     const password = String(formData.get("password") ?? "");
 
     if (login.trim() === "admin" && password.trim() === "admin") {
-      const adminResult = loginAdmin({ login, password });
+      const adminResult = await loginAdmin({ login, password });
       if (!adminResult.ok) {
         if (loginError) loginError.textContent = adminResult.message;
         return;
@@ -141,8 +140,11 @@ function initRegisterForm() {
 
     if (registerError) registerError.textContent = "";
 
-    const session = createSessionForUser(result.user);
-    localStorage.setItem("alpina_session_v1", JSON.stringify(session));
+    const loginResult = await loginUser({ login, password });
+    if (!loginResult.ok) {
+      if (registerError) registerError.textContent = loginResult.message;
+      return;
+    }
 
     closeModal();
     document.dispatchEvent(new CustomEvent("alpina:session-changed"));

@@ -1,19 +1,19 @@
-import { OFFERS } from "../data/offers.js";
 import { renderOffers } from "../renderers/offers.js";
 import { initAuthModal, openAuthModal } from "../auth/authModal.js";
 import {
   addOfferToCart,
   getCartItems,
+  getOffers,
   getSession,
   getWishlistOfferIds,
   migrateGuestOrdersToUser,
   migrateGuestWishlistAndCartToUser,
   toggleWishlistOffer,
-} from "../services/storage.js";
+} from "../services/index.js";
 
-function syncOfferFavIcons(rootEl) {
+async function syncOfferFavIcons(rootEl) {
   if (!rootEl) return;
-  const wishlist = new Set(getWishlistOfferIds());
+  const wishlist = new Set(await getWishlistOfferIds());
   rootEl.querySelectorAll(".offer-card").forEach((card) => {
     if (!(card instanceof HTMLElement)) return;
     const offerId = String(card.dataset.offerId ?? "");
@@ -26,9 +26,9 @@ function syncOfferFavIcons(rootEl) {
   });
 }
 
-function syncOfferCartButtons(rootEl) {
+async function syncOfferCartButtons(rootEl) {
   if (!rootEl) return;
-  const cart = new Set(getCartItems().map((i) => String(i.offerId)));
+  const cart = new Set((await getCartItems()).map((i) => String(i.offerId)));
   rootEl.querySelectorAll(".offer-card").forEach((card) => {
     if (!(card instanceof HTMLElement)) return;
     const offerId = String(card.dataset.offerId ?? "");
@@ -40,51 +40,53 @@ function syncOfferCartButtons(rootEl) {
   });
 }
 
-function renderWishlist() {
+async function renderWishlist() {
   const rootEl = document.getElementById("favoritesGrid");
   const emptyEl = document.getElementById("favoritesEmpty");
 
-  const wishlistIds = getWishlistOfferIds();
+  const [wishlistIds, offers] = await Promise.all([getWishlistOfferIds(), getOffers()]);
   const wishlist = new Set(wishlistIds);
-  const items = OFFERS.filter((o) => wishlist.has(String(o.id)));
+  const items = offers.filter((o) => wishlist.has(String(o.id)));
 
   if (emptyEl) {
     emptyEl.style.display = items.length === 0 ? "block" : "none";
   }
 
   renderOffers(items, rootEl);
-  syncOfferFavIcons(rootEl);
-  syncOfferCartButtons(rootEl);
+  await syncOfferFavIcons(rootEl);
+  await syncOfferCartButtons(rootEl);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  renderWishlist();
+  void renderWishlist();
 
   const grid = document.getElementById("favoritesGrid");
   if (grid) {
     grid.addEventListener("click", (e) => {
-      const target = e.target;
-      if (!(target instanceof Element)) return;
+      void (async () => {
+        const target = e.target;
+        if (!(target instanceof Element)) return;
 
-      const card = target.closest(".offer-card");
-      if (!(card instanceof HTMLElement)) return;
-      const offerId = String(card.dataset.offerId ?? "").trim();
-      if (!offerId) return;
+        const card = target.closest(".offer-card");
+        if (!(card instanceof HTMLElement)) return;
+        const offerId = String(card.dataset.offerId ?? "").trim();
+        if (!offerId) return;
 
-      const favBtn = target.closest(".offer-card__fav");
-      if (favBtn) {
-        e.preventDefault();
-        toggleWishlistOffer(offerId);
-        renderWishlist();
-        return;
-      }
+        const favBtn = target.closest(".offer-card__fav");
+        if (favBtn) {
+          e.preventDefault();
+          await toggleWishlistOffer(offerId);
+          await renderWishlist();
+          return;
+        }
 
-      const cartBtn = target.closest(".offer-card__cart");
-      if (cartBtn) {
-        e.preventDefault();
-        addOfferToCart(offerId, 1);
-        renderWishlist();
-      }
+        const cartBtn = target.closest(".offer-card__cart");
+        if (cartBtn) {
+          e.preventDefault();
+          await addOfferToCart(offerId, 1);
+          await renderWishlist();
+        }
+      })();
     });
   }
 
@@ -94,19 +96,23 @@ document.addEventListener("DOMContentLoaded", () => {
   if (profileAction) {
     profileAction.addEventListener("click", (e) => {
       e.preventDefault();
-      const session = getSession();
-      if (session?.role === "user") {
-        window.location.href = "profile.html";
-        return;
-      }
-      openAuthModal();
+      void (async () => {
+        const session = await getSession();
+        if (session?.role === "user") {
+          window.location.href = "profile.html";
+          return;
+        }
+        openAuthModal();
+      })();
     });
   }
 
   document.addEventListener("alpina:session-changed", () => {
-    migrateGuestWishlistAndCartToUser();
-    migrateGuestOrdersToUser();
-    renderWishlist();
+    void (async () => {
+      await migrateGuestWishlistAndCartToUser();
+      await migrateGuestOrdersToUser();
+      await renderWishlist();
+    })();
   });
 
   const burger = document.querySelector(".header__burger");

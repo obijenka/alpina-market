@@ -1,17 +1,19 @@
-import { OFFERS } from "../data/offers.js";
 import { initAuthModal, openAuthModal } from "../auth/authModal.js";
 import {
   addOrder,
   clearCart,
   getCurrentUser,
   getCartItems,
+  getOffers,
   getSession,
   migrateGuestOrdersToUser,
   migrateGuestWishlistAndCartToUser,
   removeOfferFromCart,
   updateCartOfferQty,
-} from "../services/storage.js";
+} from "../services/index.js";
 import { bindBookingModalTrigger, initBookingModal } from "../booking/bookingModal.js";
+
+let OFFERS_CACHE = [];
 
 function formatRub(value) {
   const num = Number(value);
@@ -30,10 +32,10 @@ function computeTotal(offerItems) {
 }
 
 function getOfferById(id) {
-  return OFFERS.find((o) => String(o.id) === String(id)) ?? null;
+  return OFFERS_CACHE.find((o) => String(o.id) === String(id)) ?? null;
 }
 
-function renderCart() {
+async function renderCart() {
   const listEl = document.getElementById("cartList");
   const emptyEl = document.getElementById("cartEmpty");
   const summaryEl = document.getElementById("cartSummary");
@@ -41,7 +43,7 @@ function renderCart() {
 
   if (!listEl) return { items: [], total: 0 };
 
-  const cart = getCartItems();
+  const cart = await getCartItems();
   const items = cart
     .map((ci) => {
       const offer = getOfferById(ci.offerId);
@@ -97,7 +99,7 @@ function renderCart() {
   return { items, total };
 }
 
-function openCheckoutModal(total) {
+async function openCheckoutModal(total) {
   const modal = document.querySelector(".checkout-modal");
   const totalEl = document.getElementById("checkoutTotal");
   if (totalEl) totalEl.textContent = formatRub(total);
@@ -105,7 +107,7 @@ function openCheckoutModal(total) {
 
   const form = document.getElementById("checkoutForm");
   if (form instanceof HTMLFormElement) {
-    const user = getCurrentUser();
+    const user = await getCurrentUser();
     const nameInput = form.querySelector("[name='name']");
     const phoneInput = form.querySelector("[name='phone']");
     const addressInput = form.querySelector("[name='address']");
@@ -164,57 +166,61 @@ function initCartEvents() {
   if (!listEl) return;
 
   listEl.addEventListener("click", (e) => {
-    const target = e.target;
-    if (!(target instanceof Element)) return;
+    void (async () => {
+      const target = e.target;
+      if (!(target instanceof Element)) return;
 
-    const row = target.closest("[data-offer-id]");
-    if (!(row instanceof HTMLElement)) return;
-    const offerId = String(row.dataset.offerId ?? "");
-    if (!offerId) return;
+      const row = target.closest("[data-offer-id]");
+      if (!(row instanceof HTMLElement)) return;
+      const offerId = String(row.dataset.offerId ?? "");
+      if (!offerId) return;
 
-    if (target.closest("[data-cart-remove]")) {
-      e.preventDefault();
-      removeOfferFromCart(offerId);
-      renderCart();
-      return;
-    }
+      if (target.closest("[data-cart-remove]")) {
+        e.preventDefault();
+        await removeOfferFromCart(offerId);
+        await renderCart();
+        return;
+      }
 
-    if (target.closest("[data-cart-inc]")) {
-      e.preventDefault();
-      const input = row.querySelector("[data-cart-qty]");
-      if (!(input instanceof HTMLInputElement)) return;
-      const next = Number(input.value) + 1;
-      updateCartOfferQty(offerId, next);
-      renderCart();
-      return;
-    }
+      if (target.closest("[data-cart-inc]")) {
+        e.preventDefault();
+        const input = row.querySelector("[data-cart-qty]");
+        if (!(input instanceof HTMLInputElement)) return;
+        const next = Number(input.value) + 1;
+        await updateCartOfferQty(offerId, next);
+        await renderCart();
+        return;
+      }
 
-    if (target.closest("[data-cart-dec]")) {
-      e.preventDefault();
-      const input = row.querySelector("[data-cart-qty]");
-      if (!(input instanceof HTMLInputElement)) return;
-      const next = Number(input.value) - 1;
-      updateCartOfferQty(offerId, next);
-      renderCart();
-      return;
-    }
+      if (target.closest("[data-cart-dec]")) {
+        e.preventDefault();
+        const input = row.querySelector("[data-cart-qty]");
+        if (!(input instanceof HTMLInputElement)) return;
+        const next = Number(input.value) - 1;
+        await updateCartOfferQty(offerId, next);
+        await renderCart();
+        return;
+      }
+    })();
   });
 
   listEl.addEventListener("change", (e) => {
-    const target = e.target;
-    if (!(target instanceof Element)) return;
+    void (async () => {
+      const target = e.target;
+      if (!(target instanceof Element)) return;
 
-    const input = target.closest("[data-cart-qty]");
-    if (!(input instanceof HTMLInputElement)) return;
+      const input = target.closest("[data-cart-qty]");
+      if (!(input instanceof HTMLInputElement)) return;
 
-    const row = target.closest("[data-offer-id]");
-    if (!(row instanceof HTMLElement)) return;
-    const offerId = String(row.dataset.offerId ?? "");
-    const next = Number(input.value);
-    if (!offerId) return;
+      const row = target.closest("[data-offer-id]");
+      if (!(row instanceof HTMLElement)) return;
+      const offerId = String(row.dataset.offerId ?? "");
+      const next = Number(input.value);
+      if (!offerId) return;
 
-    updateCartOfferQty(offerId, next);
-    renderCart();
+      await updateCartOfferQty(offerId, next);
+      await renderCart();
+    })();
   });
 }
 
@@ -226,8 +232,10 @@ function initCheckout() {
 
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", () => {
-      const { total } = renderCart();
-      openCheckoutModal(total);
+      void (async () => {
+        const { total } = await renderCart();
+        await openCheckoutModal(total);
+      })();
     });
   }
 
@@ -245,59 +253,63 @@ function initCheckout() {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const { items, total } = renderCart();
-      if (items.length === 0) {
+      void (async () => {
+        const { items, total } = await renderCart();
+        if (items.length === 0) {
+          closeCheckoutModal();
+          return;
+        }
+
+        const fd = new FormData(form);
+        const name = String(fd.get("name") ?? "").trim();
+        const phone = String(fd.get("phone") ?? "").trim();
+        const address = String(fd.get("address") ?? "").trim();
+        if (!name || !phone || !address) return;
+
+        await addOrder({
+          items: items.map((i) => ({
+            offerId: i.offerId,
+            qty: i.qty,
+            title: i.title,
+            image: i.image,
+            price: i.priceNumber,
+          })),
+          total,
+          customer: { name, phone, address },
+        });
+
+        await clearCart();
+        form.reset();
         closeCheckoutModal();
-        return;
-      }
-
-      const fd = new FormData(form);
-      const name = String(fd.get("name") ?? "").trim();
-      const phone = String(fd.get("phone") ?? "").trim();
-      const address = String(fd.get("address") ?? "").trim();
-      if (!name || !phone || !address) return;
-
-      addOrder({
-        items: items.map((i) => ({
-          offerId: i.offerId,
-          qty: i.qty,
-          title: i.title,
-          image: i.image,
-          price: i.priceNumber,
-        })),
-        total,
-        customer: { name, phone, address },
-      });
-
-      clearCart();
-      form.reset();
-      closeCheckoutModal();
-      renderCart();
-      openCheckoutSuccess();
+        await renderCart();
+        openCheckoutSuccess();
+      })();
     });
   }
 }
 
 function initHeaderActions() {
-  initAuthModal();
-
   const profileAction = document.querySelector("#profileAction");
   if (profileAction) {
     profileAction.addEventListener("click", (e) => {
       e.preventDefault();
-      const session = getSession();
-      if (session?.role === "user") {
-        window.location.href = "profile.html";
-        return;
-      }
-      openAuthModal();
+      void (async () => {
+        const session = await getSession();
+        if (session?.role === "user") {
+          window.location.href = "profile.html";
+          return;
+        }
+        openAuthModal();
+      })();
     });
   }
 
   document.addEventListener("alpina:session-changed", () => {
-    migrateGuestWishlistAndCartToUser();
-    migrateGuestOrdersToUser();
-    renderCart();
+    void (async () => {
+      await migrateGuestWishlistAndCartToUser();
+      await migrateGuestOrdersToUser();
+      await renderCart();
+    })();
   });
 }
 
@@ -323,13 +335,17 @@ function initMobileMenu() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  initHeaderActions();
+  void (async () => {
+    OFFERS_CACHE = await getOffers();
+    await renderCart();
+  })();
 
+  initAuthModal();
   initBookingModal();
   bindBookingModalTrigger({ selector: "#bookingAction" });
 
-  renderCart();
   initCartEvents();
   initCheckout();
+  initHeaderActions();
   initMobileMenu();
 });

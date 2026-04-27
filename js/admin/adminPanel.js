@@ -13,7 +13,7 @@ import {
   removeFaqItem,
   removeUser,
   updateOrderStatusAdmin,
-} from "../services/storage.js";
+} from "../services/index.js";
 
 function $(selector) {
   return document.querySelector(selector);
@@ -25,11 +25,11 @@ function formatRub(value) {
   return num.toLocaleString("ru-RU");
 }
 
-function renderOrders() {
+async function renderOrders() {
   const list = $("#adminOrdersList");
   if (!list) return;
 
-  const orders = getAllOrdersAdmin();
+  const orders = await getAllOrdersAdmin();
   if (orders.length === 0) {
     list.innerHTML = '<div class="admin__empty">Заказов пока нет</div>';
     return;
@@ -58,14 +58,16 @@ function renderOrders() {
 
   list.querySelectorAll("[data-order-id]").forEach((row) => {
     row.addEventListener("change", (e) => {
-      const target = e.target;
-      if (!(target instanceof Element)) return;
-      const select = target.closest("[data-order-status]");
-      if (!(select instanceof HTMLSelectElement)) return;
-      const id = row.getAttribute("data-order-id");
-      if (!id) return;
-      updateOrderStatusAdmin(id, select.value);
-      renderOrders();
+      void (async () => {
+        const target = e.target;
+        if (!(target instanceof Element)) return;
+        const select = target.closest("[data-order-status]");
+        if (!(select instanceof HTMLSelectElement)) return;
+        const id = row.getAttribute("data-order-id");
+        if (!id) return;
+        await updateOrderStatusAdmin(id, select.value);
+        await renderOrders();
+      })();
     });
   });
 }
@@ -95,11 +97,11 @@ function setActiveAdminTab(tabName) {
   });
 }
 
-function renderFaq() {
+async function renderFaq() {
   const list = $("#adminFaqList");
   if (!list) return;
 
-  const items = getFaq();
+  const items = await getFaq();
 
   if (items.length === 0) {
     list.innerHTML = '<div class="admin__empty">Вопросов пока нет</div>';
@@ -122,10 +124,12 @@ function renderFaq() {
 
   list.querySelectorAll("[data-remove-faq]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-remove-faq");
-      if (!id) return;
-      removeFaqItem(id);
-      renderFaq();
+      void (async () => {
+        const id = btn.getAttribute("data-remove-faq");
+        if (!id) return;
+        await removeFaqItem(id);
+        await renderFaq();
+      })();
     });
   });
 }
@@ -150,16 +154,18 @@ function initAdminLogout() {
   if (!btn) return;
 
   btn.addEventListener("click", () => {
-    clearSession();
-    window.location.href = "index.html";
+    void (async () => {
+      await clearSession();
+      window.location.href = "index.html";
+    })();
   });
 }
 
-function renderUsers() {
+async function renderUsers() {
   const list = $("#adminUsersList");
   if (!list) return;
 
-  const users = getUsers();
+  const users = await getUsers();
 
   if (users.length === 0) {
     list.innerHTML = '<div class="admin__empty">Пользователей пока нет</div>';
@@ -182,19 +188,21 @@ function renderUsers() {
 
   list.querySelectorAll("[data-remove-user]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-remove-user");
-      if (!id) return;
-      removeUser(id);
-      renderUsers();
+      void (async () => {
+        const id = btn.getAttribute("data-remove-user");
+        if (!id) return;
+        await removeUser(id);
+        await renderUsers();
+      })();
     });
   });
 }
 
-function renderProducts() {
+async function renderProducts() {
   const list = $("#adminProductsList");
   if (!list) return;
 
-  const products = getProducts();
+  const products = await getProducts();
 
   if (products.length === 0) {
     list.innerHTML = '<div class="admin__empty">Товаров пока нет</div>';
@@ -217,10 +225,12 @@ function renderProducts() {
 
   list.querySelectorAll("[data-remove-product]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-remove-product");
-      if (!id) return;
-      removeProduct(id);
-      renderProducts();
+      void (async () => {
+        const id = btn.getAttribute("data-remove-product");
+        if (!id) return;
+        await removeProduct(id);
+        await renderProducts();
+      })();
     });
   });
 }
@@ -231,13 +241,13 @@ function initAdminAuth() {
 
   if (!gate || !app) return;
 
-  function sync() {
-    const isAdmin = isAdminSession();
+  async function sync() {
+    const isAdmin = await isAdminSession();
     gate.style.display = isAdmin ? "none" : "block";
     app.style.display = isAdmin ? "block" : "none";
   }
 
-  sync();
+  void sync();
 
   const form = $("#adminLoginForm");
   const error = $("#adminLoginError");
@@ -245,22 +255,24 @@ function initAdminAuth() {
   if (form) {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const formData = new FormData(form);
-      const login = String(formData.get("login") ?? "");
-      const password = String(formData.get("password") ?? "");
+      void (async () => {
+        const formData = new FormData(form);
+        const login = String(formData.get("login") ?? "");
+        const password = String(formData.get("password") ?? "");
 
-      const result = loginAdmin({ login, password });
-      if (!result.ok) {
-        if (error) error.textContent = result.message;
-        return;
-      }
+        const result = await loginAdmin({ login, password });
+        if (!result.ok) {
+          if (error) error.textContent = result.message;
+          return;
+        }
 
-      if (error) error.textContent = "";
-      sync();
-      renderUsers();
-      renderProducts();
-      renderFaq();
-      renderOrders();
+        if (error) error.textContent = "";
+        await sync();
+        await renderUsers();
+        await renderProducts();
+        await renderFaq();
+        await renderOrders();
+      })();
     });
   }
 
@@ -288,7 +300,7 @@ function initUserCreate() {
 
     if (error) error.textContent = "";
     form.reset();
-    renderUsers();
+    await renderUsers();
   });
 }
 
@@ -301,20 +313,22 @@ function initProductCreate() {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const formData = new FormData(form);
-    const title = String(formData.get("title") ?? "");
-    const price = String(formData.get("price") ?? "");
-    const image = String(formData.get("image") ?? "");
+    void (async () => {
+      const formData = new FormData(form);
+      const title = String(formData.get("title") ?? "");
+      const price = String(formData.get("price") ?? "");
+      const image = String(formData.get("image") ?? "");
 
-    const result = addProduct({ title, price, image });
-    if (!result.ok) {
-      if (error) error.textContent = result.message;
-      return;
-    }
+      const result = await addProduct({ title, price, image });
+      if (!result.ok) {
+        if (error) error.textContent = result.message;
+        return;
+      }
 
-    if (error) error.textContent = "";
-    form.reset();
-    renderProducts();
+      if (error) error.textContent = "";
+      form.reset();
+      await renderProducts();
+    })();
   });
 }
 
@@ -327,19 +341,21 @@ function initFaqCreate() {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const formData = new FormData(form);
-    const question = String(formData.get("question") ?? "");
-    const answer = String(formData.get("answer") ?? "");
+    void (async () => {
+      const formData = new FormData(form);
+      const question = String(formData.get("question") ?? "");
+      const answer = String(formData.get("answer") ?? "");
 
-    const result = addFaqItem({ question, answer });
-    if (!result.ok) {
-      if (error) error.textContent = result.message;
-      return;
-    }
+      const result = await addFaqItem({ question, answer });
+      if (!result.ok) {
+        if (error) error.textContent = result.message;
+        return;
+      }
 
-    if (error) error.textContent = "";
-    form.reset();
-    renderFaq();
+      if (error) error.textContent = "";
+      form.reset();
+      await renderFaq();
+    })();
   });
 }
 
@@ -351,10 +367,12 @@ document.addEventListener("DOMContentLoaded", () => {
   initProductCreate();
   initFaqCreate();
 
-  if (isAdminSession()) {
-    renderUsers();
-    renderProducts();
-    renderFaq();
-    renderOrders();
-  }
+  void (async () => {
+    if (await isAdminSession()) {
+      await renderUsers();
+      await renderProducts();
+      await renderFaq();
+      await renderOrders();
+    }
+  })();
 });

@@ -1,5 +1,5 @@
 import { mountBookingModalMarkup } from "./bookingModalMarkup.js";
-import { getCurrentUser } from "../services/storage.js";
+import { getCurrentUser } from "../services/index.js";
 
 function getEls() {
   const modal = document.querySelector(".booking-modal");
@@ -22,13 +22,13 @@ function getEls() {
   };
 }
 
-function openModal() {
+async function openModal() {
   const { modal } = getEls();
   if (!modal) return;
 
   const { form } = getEls();
   if (form instanceof HTMLFormElement) {
-    const user = getCurrentUser();
+    const user = await getCurrentUser();
     const nameInput = form.querySelector("[name='name']");
     const phoneInput = form.querySelector("[name='phone']");
     const emailInput = form.querySelector("[name='email']");
@@ -55,7 +55,7 @@ function openModal() {
 }
 
 export function openBookingModal() {
-  openModal();
+  void openModal();
 }
 
 function closeModal() {
@@ -134,6 +134,6 @@ export function bindBookingModalTrigger({ selector }) {
 
   trigger.addEventListener("click", (e) => {
     e.preventDefault();
-    openModal();
+    void openModal();
   });
 }

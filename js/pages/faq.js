@@ -1,6 +1,5 @@
 import { initAuthModal, openAuthModal } from "../auth/authModal.js";
-import { FAQ_ITEMS } from "../data/faq.js";
-import { getFaq, getSession, setFaq } from "../services/storage.js";
+import { getFaq, getSession } from "../services/index.js";
 
 function escapeHtml(value) {
   return String(value)
@@ -98,24 +97,23 @@ document.addEventListener("DOMContentLoaded", () => {
   if (profileAction) {
     profileAction.addEventListener("click", (e) => {
       e.preventDefault();
-      const session = getSession();
-      if (session?.role === "user") {
-        window.location.href = "profile.html";
-        return;
-      }
-      openAuthModal();
+      void (async () => {
+        const session = await getSession();
+        if (session?.role === "user") {
+          window.location.href = "profile.html";
+          return;
+        }
+        openAuthModal();
+      })();
     });
   }
 
-  const list = document.getElementById("faqList");
-  const stored = getFaq();
-  const itemsToRender = stored.length > 0 ? stored : FAQ_ITEMS;
-  if (stored.length === 0) {
-    setFaq(FAQ_ITEMS);
-  }
-  renderFaq(list, itemsToRender);
-
-  initFaqAccordion();
+  void (async () => {
+    const list = document.getElementById("faqList");
+    const items = await getFaq();
+    renderFaq(list, items);
+    initFaqAccordion();
+  })();
 
   const burger = document.querySelector(".header__burger");
   const menu = document.querySelector(".mobile-menu");

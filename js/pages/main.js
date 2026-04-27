@@ -1,22 +1,22 @@
-import { OFFERS } from "../data/offers.js";
-import { RECENT_ITEMS } from "../data/recent.js";
 import { renderOffers } from "../renderers/offers.js";
 import { renderRecent } from "../renderers/recent.js";
 import { initAuthModal, openAuthModal } from "../auth/authModal.js";
 import {
   addOfferToCart,
   getCartItems,
+  getOffers,
+  getRecentItems,
   getSession,
   getWishlistOfferIds,
   migrateGuestOrdersToUser,
   migrateGuestWishlistAndCartToUser,
   toggleWishlistOffer,
-} from "../services/storage.js";
+} from "../services/index.js";
 import { bindBookingModalTrigger, initBookingModal } from "../booking/bookingModal.js";
 
-function syncOfferFavIcons(rootEl) {
+async function syncOfferFavIcons(rootEl) {
   if (!rootEl) return;
-  const wishlist = new Set(getWishlistOfferIds());
+  const wishlist = new Set(await getWishlistOfferIds());
   rootEl.querySelectorAll(".offer-card").forEach((card) => {
     if (!(card instanceof HTMLElement)) return;
     const offerId = String(card.dataset.offerId ?? "");
@@ -29,9 +29,9 @@ function syncOfferFavIcons(rootEl) {
   });
 }
 
-function syncOfferCartButtons(rootEl) {
+async function syncOfferCartButtons(rootEl) {
   if (!rootEl) return;
-  const cart = new Set(getCartItems().map((i) => String(i.offerId)));
+  const cart = new Set((await getCartItems()).map((i) => String(i.offerId)));
   rootEl.querySelectorAll(".offer-card").forEach((card) => {
     if (!(card instanceof HTMLElement)) return;
     const offerId = String(card.dataset.offerId ?? "");
@@ -44,40 +44,46 @@ function syncOfferCartButtons(rootEl) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const offersGrid = document.getElementById("offersGrid");
-  renderOffers(OFFERS, offersGrid);
-  syncOfferFavIcons(offersGrid);
-  syncOfferCartButtons(offersGrid);
+  void (async () => {
+    const offersGrid = document.getElementById("offersGrid");
+    const recentGrid = document.getElementById("recentGrid");
 
+    const [offers, recent] = await Promise.all([getOffers(), getRecentItems()]);
+    renderOffers(offers, offersGrid);
+    renderRecent(recent, recentGrid);
+    await syncOfferFavIcons(offersGrid);
+    await syncOfferCartButtons(offersGrid);
+  })();
+
+  const offersGrid = document.getElementById("offersGrid");
   if (offersGrid) {
     offersGrid.addEventListener("click", (e) => {
-      const target = e.target;
-      if (!(target instanceof Element)) return;
+      void (async () => {
+        const target = e.target;
+        if (!(target instanceof Element)) return;
 
-      const card = target.closest(".offer-card");
-      if (!(card instanceof HTMLElement)) return;
-      const offerId = String(card.dataset.offerId ?? "").trim();
-      if (!offerId) return;
+        const card = target.closest(".offer-card");
+        if (!(card instanceof HTMLElement)) return;
+        const offerId = String(card.dataset.offerId ?? "").trim();
+        if (!offerId) return;
 
-      const favBtn = target.closest(".offer-card__fav");
-      if (favBtn) {
-        e.preventDefault();
-        toggleWishlistOffer(offerId);
-        syncOfferFavIcons(offersGrid);
-        return;
-      }
+        const favBtn = target.closest(".offer-card__fav");
+        if (favBtn) {
+          e.preventDefault();
+          await toggleWishlistOffer(offerId);
+          await syncOfferFavIcons(offersGrid);
+          return;
+        }
 
-      const cartBtn = target.closest(".offer-card__cart");
-      if (cartBtn) {
-        e.preventDefault();
-        addOfferToCart(offerId, 1);
-        syncOfferCartButtons(offersGrid);
-      }
+        const cartBtn = target.closest(".offer-card__cart");
+        if (cartBtn) {
+          e.preventDefault();
+          await addOfferToCart(offerId, 1);
+          await syncOfferCartButtons(offersGrid);
+        }
+      })();
     });
   }
-
-  const recentGrid = document.getElementById("recentGrid");
-  renderRecent(RECENT_ITEMS, recentGrid);
 
   initAuthModal();
 
@@ -88,20 +94,24 @@ document.addEventListener("DOMContentLoaded", () => {
   if (profileAction) {
     profileAction.addEventListener("click", (e) => {
       e.preventDefault();
-      const session = getSession();
-      if (session?.role === "user") {
-        window.location.href = "profile.html";
-        return;
-      }
-      openAuthModal();
+      void (async () => {
+        const session = await getSession();
+        if (session?.role === "user") {
+          window.location.href = "profile.html";
+          return;
+        }
+        openAuthModal();
+      })();
     });
   }
 
   document.addEventListener("alpina:session-changed", () => {
-    migrateGuestWishlistAndCartToUser();
-    migrateGuestOrdersToUser();
-    syncOfferFavIcons(offersGrid);
-    syncOfferCartButtons(offersGrid);
+    void (async () => {
+      await migrateGuestWishlistAndCartToUser();
+      await migrateGuestOrdersToUser();
+      await syncOfferFavIcons(offersGrid);
+      await syncOfferCartButtons(offersGrid);
+    })();
   });
 
   const burger = document.querySelector(".header__burger");

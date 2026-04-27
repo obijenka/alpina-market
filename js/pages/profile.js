@@ -9,7 +9,7 @@ import {
   removeCurrentUserAddress,
   setCurrentUserDefaultAddress,
   updateCurrentUserProfile,
-} from "../services/storage.js";
+} from "../services/index.js";
 
 function $(selector) {
   return document.querySelector(selector);
@@ -40,12 +40,12 @@ function getStatusLabel(status) {
   return "Текущий";
 }
 
-function renderOrders({ status }) {
+async function renderOrdersAsync({ status }) {
   const list = $("#ordersList");
   const meta = $("#ordersMeta");
   if (!list) return;
 
-  const orders = getOrders();
+  const orders = await getOrders();
   const filtered = orders.filter((o) => String(o.status) === String(status));
 
   if (meta) meta.textContent = orders.length ? `${orders.length}` : "";
@@ -71,7 +71,7 @@ function renderOrders({ status }) {
       return `
         <div class="order-card" data-order-id="${escapeHtml(o.id)}">
           <div class="order-card__top">
-            <div class="order-card__title">Заказ №${escapeHtml(o.id.slice(0, 6))}</div>
+            <div class="order-card__title">Заказ №${escapeHtml(String(o.id).slice(0, 6))}</div>
           </div>
           <div class="order-card__meta">Дата: ${escapeHtml(formatDateTime(o.createdAt))}</div>
           <div class="order-card__meta">Сумма: ${escapeHtml(formatRub(o.total))}</div>
@@ -91,7 +91,7 @@ function initOrdersTabs() {
   const setActive = (next) => {
     active = next;
     tabs.forEach((t) => t.classList.toggle("is-active", t.getAttribute("data-orders-tab") === next));
-    renderOrders({ status: active });
+    void renderOrdersAsync({ status: active });
   };
 
   tabs.forEach((btn) => {
@@ -187,12 +187,12 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function syncGate() {
+async function syncGate() {
   const gate = $("#profileGate");
   const app = $("#profileApp");
   const logoutBtn = $("#profileLogoutBtn");
 
-  const session = getSession();
+  const session = await getSession();
   const isAuthed = session?.role === "user";
 
   if (gate) gate.style.display = isAuthed ? "none" : "block";
@@ -202,11 +202,11 @@ function syncGate() {
   return isAuthed;
 }
 
-function fillProfileForm() {
+async function fillProfileForm() {
   const form = $("#profileForm");
   if (!(form instanceof HTMLFormElement)) return;
 
-  const user = getCurrentUser();
+  const user = await getCurrentUser();
   const profile = user?.profile ?? {};
 
   const fullName = form.elements.namedItem("fullName");
@@ -218,11 +218,11 @@ function fillProfileForm() {
   if (email instanceof HTMLInputElement) email.value = String(profile.email ?? "");
 }
 
-function renderAddresses() {
+async function renderAddresses() {
   const list = $("#addressList");
   if (!list) return;
 
-  const addresses = getCurrentUserAddresses();
+  const addresses = await getCurrentUserAddresses();
 
   if (addresses.length === 0) {
     list.innerHTML = '<div class="profile-address__text">Адресов пока нет</div>';
@@ -258,22 +258,24 @@ function renderAddresses() {
 
   list.querySelectorAll("[data-address-id]").forEach((card) => {
     card.addEventListener("click", (e) => {
-      const target = e.target;
-      if (!(target instanceof Element)) return;
+      void (async () => {
+        const target = e.target;
+        if (!(target instanceof Element)) return;
 
-      const id = card.getAttribute("data-address-id");
-      if (!id) return;
+        const id = card.getAttribute("data-address-id");
+        if (!id) return;
 
-      if (target.closest("[data-remove]")) {
-        removeCurrentUserAddress(id);
-        renderAddresses();
-        return;
-      }
+        if (target.closest("[data-remove]")) {
+          await removeCurrentUserAddress(id);
+          await renderAddresses();
+          return;
+        }
 
-      if (target.closest("[data-make-default]")) {
-        setCurrentUserDefaultAddress(id);
-        renderAddresses();
-      }
+        if (target.closest("[data-make-default]")) {
+          await setCurrentUserDefaultAddress(id);
+          await renderAddresses();
+        }
+      })();
     });
   });
 }
@@ -292,14 +294,16 @@ function initProfileSave() {
     const phone = String(formData.get("phone") ?? "");
     const email = String(formData.get("email") ?? "");
 
-    const result = updateCurrentUserProfile({ fullName, phone, email });
-    if (!result.ok) {
-      if (error) error.textContent = result.message;
-      return;
-    }
+    void (async () => {
+      const result = await updateCurrentUserProfile({ fullName, phone, email });
+      if (!result.ok) {
+        if (error) error.textContent = result.message;
+        return;
+      }
 
-    if (error) error.textContent = "";
-    setSaved(saved);
+      if (error) error.textContent = "";
+      setSaved(saved);
+    })();
   });
 }
 
@@ -314,23 +318,25 @@ function initAddressCreate() {
 
     const formData = new FormData(form);
 
-    const result = addCurrentUserAddress({
-      label: String(formData.get("label") ?? ""),
-      city: String(formData.get("city") ?? ""),
-      street: String(formData.get("street") ?? ""),
-      house: String(formData.get("house") ?? ""),
-      apartment: String(formData.get("apartment") ?? ""),
-    });
+    void (async () => {
+      const result = await addCurrentUserAddress({
+        label: String(formData.get("label") ?? ""),
+        city: String(formData.get("city") ?? ""),
+        street: String(formData.get("street") ?? ""),
+        house: String(formData.get("house") ?? ""),
+        apartment: String(formData.get("apartment") ?? ""),
+      });
 
-    if (!result.ok) {
-      if (error) error.textContent = result.message;
-      return;
-    }
+      if (!result.ok) {
+        if (error) error.textContent = result.message;
+        return;
+      }
 
-    if (error) error.textContent = "";
-    form.reset();
-    renderAddresses();
-    setSaved(saved);
+      if (error) error.textContent = "";
+      form.reset();
+      await renderAddresses();
+      setSaved(saved);
+    })();
   });
 }
 
@@ -339,8 +345,10 @@ function initLogout() {
   if (!btn) return;
 
   btn.addEventListener("click", () => {
-    clearSession();
-    window.location.href = "index.html";
+    void (async () => {
+      await clearSession();
+      window.location.href = "index.html";
+    })();
   });
 }
 
@@ -372,20 +380,24 @@ document.addEventListener("DOMContentLoaded", () => {
   initProfileSave();
   initAddressCreate();
 
-  const authed = syncGate();
-  if (authed) {
-    fillProfileForm();
-    renderAddresses();
-    initOrdersTabs();
-  }
-
-  document.addEventListener("alpina:session-changed", () => {
-    const isAuthed = syncGate();
-    if (isAuthed) {
-      fillProfileForm();
-      renderAddresses();
+  void (async () => {
+    const authed = await syncGate();
+    if (authed) {
+      await fillProfileForm();
+      await renderAddresses();
       initOrdersTabs();
     }
+  })();
+
+  document.addEventListener("alpina:session-changed", () => {
+    void (async () => {
+      const isAuthed = await syncGate();
+      if (isAuthed) {
+        await fillProfileForm();
+        await renderAddresses();
+        initOrdersTabs();
+      }
+    })();
   });
 
   const burger = document.querySelector(".header__burger");
