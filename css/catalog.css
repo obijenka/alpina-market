@@ -1,0 +1,25 @@
+.catalog-page__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+
+.catalog-page__meta {
+  opacity: 0.75;
+}
+
+.catalog-page__select {
+  min-width: 220px;
+  min-height: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  border-radius: 6px;
+  padding: 0 12px;
+  background: #ffffff;
+}
+
+.catalog-page__empty {
+  display: none;
+  padding: 18px 0;
+}

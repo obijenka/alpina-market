@@ -1,16 +1,16 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Товар — Alpina Market</title>
+    <title>Каталог</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/auth-modal.css" />
-    <link rel="stylesheet" href="css/product.css" />
+    <link rel="stylesheet" href="css/catalog.css" />
   </head>
 
   <body>
@@ -25,7 +25,7 @@
           <nav class="header__top-nav" aria-label="Верхнее меню">
             <a class="header__top-link" href="#">О нас</a>
             <a class="header__top-link" href="#">Наши салоны</a>
-            <a class="header__top-link" id="bookingAction" href="#">Онлайн-запись</a>
+            <a class="header__top-link" href="#" id="bookingAction">Онлайн-запись</a>
             <a class="header__top-link" href="faq.html">Вопросы и ответы</a>
           </nav>
 
@@ -96,55 +96,21 @@
     </header>
 
     <main>
-      <section class="offers">
+      <section class="offers catalog-page">
         <div class="container">
           <div class="section-head">
-            <h2 id="productTitle" class="section-head__title">Товар</h2>
+            <h2 class="section-head__title">Каталог</h2>
           </div>
 
-          <div id="productError" class="product-error">Товар не найден.</div>
-
-          <div id="productRoot"></div>
-
-          <div id="productReviews" class="product-reviews">
-            <div class="section-head product-reviews__head">
-              <h2 class="section-head__title">Отзывы</h2>
-            </div>
-
-            <div id="reviewsList" class="reviews-list"></div>
-            <div id="reviewsEmpty" class="reviews-empty">Отзывов пока нет.</div>
-
-            <div class="review-accordion review-accordion--spaced">
-              <div class="review-item" data-review-item>
-                <button class="review-item__head" type="button" data-review-toggle aria-expanded="false">
-                  <span class="review-item__title">Оставить отзыв</span>
-                  <span class="review-item__meta" aria-live="polite"></span>
-                  <span class="review-item__chev" aria-hidden="true"></span>
-                </button>
-                <div class="review-item__body" data-review-body>
-                  <div class="review-item__content">
-                    <form id="reviewForm" class="auth-form" autocomplete="off">
-                      <label class="auth-field">
-                        <div class="auth-field__label">Оценка</div>
-                        <div class="review-stars" data-review-stars aria-label="Оценка"></div>
-                        <input type="hidden" name="rating" required />
-                      </label>
-
-                      <label class="auth-field">
-                        <div class="auth-field__label">Текст</div>
-                        <textarea class="auth-field__input" name="text" rows="4" required></textarea>
-                      </label>
-
-                      <div class="auth-form__error" id="reviewFormError"></div>
-
-                      <button class="auth-form__btn" type="submit">Отправить</button>
-                      <div class="review-form-note">Отзыв появится после модерации.</div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="catalog-page__bar">
+            <div id="catalogMeta" class="catalog-page__meta"></div>
+            <select id="catalogCategory" class="catalog-page__select" aria-label="Фильтр по категории">
+              <option value="">Все категории</option>
+            </select>
           </div>
+
+          <div id="catalogEmpty" class="catalog-page__empty">Товары не найдены.</div>
+          <div class="offers__grid" id="catalogGrid"></div>
         </div>
       </section>
     </main>
@@ -154,10 +120,10 @@
         <div class="container footer__top-inner">
           <div class="footer__col footer__links">
             <div class="footer__title">Каталог</div>
-            <a class="footer__link" href="#">Мебель</a>
-            <a class="footer__link" href="#">Товары для дома</a>
-            <a class="footer__link" href="#">Плитка, керамогранит и мозаика</a>
-            <a class="footer__link" href="#">Акции</a>
+            <a class="footer__link" href="catalog.html">Мебель</a>
+            <a class="footer__link" href="catalog.html">Товары для дома</a>
+            <a class="footer__link" href="catalog.html">Плитка, керамогранит и мозаика</a>
+            <a class="footer__link" href="catalog.html">Акции</a>
           </div>
 
           <div class="footer__col footer__links">
@@ -220,6 +186,7 @@
 
         <nav class="mobile-menu__nav" aria-label="Меню">
           <a class="mobile-menu__link" href="index.html">Главная</a>
+          <a class="mobile-menu__link" href="catalog.html">Каталог</a>
           <a class="mobile-menu__link" href="faq.html">Вопросы и ответы</a>
           <a class="mobile-menu__link" href="profile.html">Профиль</a>
           <a class="mobile-menu__link" href="favorites.html">Избранное</a>
@@ -228,6 +195,6 @@
       </div>
     </div>
 
-    <script type="module" src="js/pages/product.js"></script>
+    <script type="module" src="js/pages/catalog.js"></script>
   </body>
 </html>

@@ -134,6 +134,8 @@
       },
       "addresses": [],
       "wishlist": [
+        "4",
+        "3",
         "2"
       ],
       "cart": [
@@ -144,7 +146,7 @@
       ],
       "orders": [],
       "createdAt": "2026-04-27T12:47:14.853Z",
-      "updatedAt": "2026-04-27T14:01:54.722Z"
+      "updatedAt": "2026-04-27T15:39:10.768Z"
     }
   ],
   "products": [
@@ -1234,9 +1236,9 @@
   },
   "session": {
     "id": 1,
-    "role": "admin",
-    "userId": "admin",
-    "login": "admin",
-    "createdAt": "2026-04-27T15:12:35.310Z"
+    "role": "user",
+    "userId": "7fc31798-cd1f-41ee-8cf9-cf8c2ac9386f",
+    "login": "Лиза2",
+    "createdAt": "2026-04-27T15:39:05.302Z"
   }
 }
