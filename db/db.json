@@ -1234,9 +1234,9 @@
   },
   "session": {
     "id": 1,
-    "role": null,
-    "userId": null,
-    "login": null,
-    "createdAt": null
+    "role": "admin",
+    "userId": "admin",
+    "login": "admin",
+    "createdAt": "2026-04-27T15:12:35.310Z"
   }
 }

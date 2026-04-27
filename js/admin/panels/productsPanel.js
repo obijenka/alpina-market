@@ -64,6 +64,7 @@ export function initProductCreate() {
       const image = String(formData.get("image") ?? "");
       const categories = String(formData.get("categories") ?? "");
       const tags = String(formData.get("tags") ?? "");
+      const badge = String(formData.get("badge") ?? "");
       const attributesRaw = String(formData.get("attributes") ?? "");
 
       const result = await addProduct({
@@ -74,6 +75,7 @@ export function initProductCreate() {
         image,
         categories,
         tags,
+        badge,
         attributes: attributesRaw,
       });
       if (!result.ok) {
