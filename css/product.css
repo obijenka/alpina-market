@@ -2,21 +2,31 @@
   display: grid;
   grid-template-columns: minmax(280px, 520px) minmax(280px, 1fr);
   gap: 24px;
-  align-items: start;
+  align-items: center;
 }
 
 .product-gallery {
   display: grid;
   gap: 12px;
-  justify-items: center;
-  background-color: #F6F6F6;
+  width: 100%;
+  justify-items: stretch;
 }
+
 
 .product-main-image {
   position: relative;
-  /* max-width: 320px;
   width: 100%;
-  height: 100%; */
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f6f6f6;
+}
+
+.product-main-image > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .product-badge {
@@ -99,10 +109,6 @@
 
 .product-error {
   display: none;
-  padding: 18px 0;
-}
-
-.product-reviews {
   padding: 18px 0;
 }
 

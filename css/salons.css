@@ -1,5 +1,5 @@
 .salons-page {
-  padding-bottom: 96px;
+  padding: 20px 0px 80px;
 }
 
 .salons-page__intro {
@@ -12,7 +12,6 @@
 .salons-page__map {
   overflow: hidden;
   min-height: 560px;
-  border-radius: 12px;
   background: #f6f6f6;
 }
 

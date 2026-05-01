@@ -55,11 +55,11 @@ body {
 .admin-logout {
   height: 38px;
   padding: 0 12px;
-  border: 1px solid #000000;
   border-radius: 8px;
-  background: #ffffff;
+  background: #000;
   cursor: pointer;
   text-align: left;
+  color: #fff;
 }
 
 .admin-tab {

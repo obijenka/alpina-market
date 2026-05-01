@@ -10,6 +10,7 @@ import {
   migrateGuestWishlistAndCartToUser,
   toggleWishlistOffer,
 } from "../services/index.js";
+import { initScrollRestoration } from "../utils/scrollRestoration.js";
 
 let catalogProducts = [];
 
@@ -206,16 +207,22 @@ function initHeaderActions() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const scrollRestoration = initScrollRestoration({ storageKey: "alpina:catalog-scroll-y" });
+
   initAuthModal();
   initCatalogEvents();
   initHeaderActions();
-  void loadCatalog();
+  void (async () => {
+    await loadCatalog();
+    scrollRestoration?.restore();
+  })();
 
   document.addEventListener("alpina:session-changed", () => {
     void (async () => {
       await migrateGuestWishlistAndCartToUser();
       await migrateGuestOrdersToUser();
       await renderCatalog();
+      scrollRestoration?.restore();
     })();
   });
 });

@@ -5,10 +5,14 @@ import { initFaqCreate, renderFaq } from "./panels/faqPanel.js";
 import { initProductCreate, renderProducts } from "./panels/productsPanel.js";
 import { renderReviews } from "./panels/reviewsPanel.js";
 import { initUserCreate, renderUsers } from "./panels/usersPanel.js";
+import { initScrollRestoration } from "../utils/scrollRestoration.js";
 
 function $(selector) {
   return document.querySelector(selector);
 }
+
+const ADMIN_ACTIVE_TAB_KEY = "alpina:admin-active-tab";
+const ADMIN_SCROLL_Y_KEY = "alpina:admin-scroll-y";
 
 function setActiveAdminTab(tabName) {
   const tabs = document.querySelectorAll("[data-admin-tab]");
@@ -34,6 +38,13 @@ function initAdminTabs() {
     tab.addEventListener("click", () => {
       const name = tab.getAttribute("data-admin-tab");
       if (!name) return;
+
+      try {
+        localStorage.setItem(ADMIN_ACTIVE_TAB_KEY, name);
+      } catch {
+        // ignore
+      }
+
       setActiveAdminTab(name);
 
       void (async () => {
@@ -47,7 +58,15 @@ function initAdminTabs() {
     });
   });
 
-  setActiveAdminTab("products");
+  let initialTab = "products";
+  try {
+    const saved = localStorage.getItem(ADMIN_ACTIVE_TAB_KEY);
+    if (saved) initialTab = saved;
+  } catch {
+    // ignore
+  }
+
+  setActiveAdminTab(initialTab);
 }
 
 function initAdminLogout() {
@@ -104,6 +123,8 @@ function initAdminAuth() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const scrollRestoration = initScrollRestoration({ storageKey: ADMIN_SCROLL_Y_KEY });
+
   initAdminAuth();
   initAdminTabs();
   initAdminLogout();
@@ -115,5 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (await isAdminSession()) {
       await Promise.all([renderUsers(), renderProducts(), renderFaq(), renderReviews(), renderOrders()]);
     }
+
+    scrollRestoration?.restore();
   })();
 });
