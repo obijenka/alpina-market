@@ -12,6 +12,7 @@
     />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dark-theme.css" />
     <link rel="stylesheet" href="css/auth-modal.css" />
     <link rel="stylesheet" href="css/booking-modal.css" />
   </head>
@@ -19,14 +20,21 @@
     <header class="header">
       <div class="header__top">
         <div class="container header__top-inner">
-          <button class="header__city" type="button">
-            Санкт-Петербург
-            <img
-              class="header__chevron"
-              src="assets/icons/chevron.svg"
-              alt="chevron"
-            />
-          </button>
+          <div class="header__top-left">
+            <button class="header__city" type="button">
+              Санкт-Петербург
+              <img
+                class="header__chevron"
+                src="assets/icons/chevron.svg"
+                alt="chevron"
+              />
+            </button>
+
+            <select class="header__theme" id="themeSelect" aria-label="Тема">
+              <option value="light">Светлая</option>
+              <option value="dark">Темная</option>
+            </select>
+          </div>
 
           <nav class="header__top-nav" aria-label="Верхнее меню">
             <a class="header__top-link" href="#">О нас</a>

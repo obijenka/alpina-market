@@ -13,6 +13,9 @@ import {
   toggleWishlistOffer,
 } from "../services/index.js";
 import { bindBookingModalTrigger, initBookingModal } from "../booking/bookingModal.js";
+import { applySavedTheme, initThemeSelect } from "../utils/theme.js";
+
+applySavedTheme();
 
 async function syncOfferFavIcons(rootEl) {
   if (!rootEl) return;
@@ -44,6 +47,7 @@ async function syncOfferCartButtons(rootEl) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  initThemeSelect();
   void (async () => {
     const offersGrid = document.getElementById("offersGrid");
     const recentGrid = document.getElementById("recentGrid");

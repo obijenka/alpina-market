@@ -1,0 +1,121 @@
+body[data-theme="dark"] {
+  --text: #f2f2f2;
+  --line: rgba(255, 255, 255, 0.12);
+  --muted: rgba(255, 255, 255, 0.72);
+  background: #0f0f0f;
+  color: var(--text);
+}
+
+body[data-theme="dark"] .footer__btn {
+  border-color: #fff;
+}
+
+body[data-theme="dark"] .header__search-input::placeholder {
+  color: #9f9f9f;
+}
+
+body[data-theme="dark"] .offer-card__cart img,
+body[data-theme="dark"] .header__search-btn img,
+body[data-theme="dark"] .footer__social-link img,
+body[data-theme="dark"] .header__logo img,
+body[data-theme="dark"] .header__city img {
+  filter: invert(1);
+}
+
+
+/* body[data-theme="dark"] img {
+  filter: brightness(1) contrast(1);
+} */
+/* 
+body[data-theme="dark"] .header__action img,
+body[data-theme="dark"] .header__chevron,
+body[data-theme="dark"] .mobile-menu img,
+body[data-theme="dark"] .auth-modal__close,
+body[data-theme="dark"] .offer-card__cart img,
+body[data-theme="dark"] .offer-card__fav img {
+  filter: invert(1) brightness(1.1);
+} */
+
+/* body[data-theme="dark"] .offer-card__image {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+body[data-theme="dark"] .offer-card__image img{
+  background: rgba(0, 0, 0, 0.45);
+} */
+
+body[data-theme="dark"] .header__top,
+body[data-theme="dark"] .header__main,
+body[data-theme="dark"] .header__bottom {
+  background: #0f0f0f; 
+}
+
+
+body[data-theme="dark"] .header__menu-link--catalog::after {
+  background-color: var(--text);
+}
+
+body[data-theme="dark"] .header__burger-line {
+  background: #f2f2f2;
+}
+
+body[data-theme="dark"] .header__search {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+body[data-theme="dark"] .footer,
+body[data-theme="dark"] .offer-card,
+body[data-theme="dark"] .review-item,
+body[data-theme="dark"] .auth-modal__panel,
+body[data-theme="dark"] .booking-modal__panel {
+  background: #141414;
+}
+
+body[data-theme="dark"] .offer-card {
+  background: #0f0f0f;
+}
+
+body[data-theme="dark"] .mobile-menu__panel {
+  background: #141414;
+}
+
+/* body[data-theme="dark"] .offer-card__inner {
+  background: rgba(255, 255, 255, 0.06);
+} */
+
+/* body[data-theme="dark"] .offer-card__image img {
+  filter: brightness(0.55) contrast(1.1);
+} */
+
+body[data-theme="dark"] .offer-card__more {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+body[data-theme="dark"] .offer-card__thumb {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+body[data-theme="dark"] .biz__inner {
+  background: #2d2d2d;
+}
+
+body[data-theme="dark"] .biz__title {
+  color: var(--text);
+}
+
+body[data-theme="dark"] .biz__btn {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+body[data-theme="dark"] .footer__bottom {
+  border-top-color: var(--line);
+}
+
+body[data-theme="dark"] .design__info {
+  background: #2d2d2d;
+}
+
+body[data-theme="dark"] .design-card {
+  background: #2d2d2d;
+}
+

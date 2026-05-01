@@ -42,6 +42,12 @@
    align-items: center;
    justify-content: space-between;
  }
+
+ .header__top-left {
+   display: inline-flex;
+   align-items: center;
+   gap: 12px;
+ }
  
  .header__city {
    display: inline-flex;
@@ -49,6 +55,16 @@
    gap: 8px;
    font-size: 12px;
    letter-spacing: 0.5px;
+ }
+
+ .header__theme {
+   height: 28px;
+   padding: 0 10px;
+   border: 1px solid var(--line);
+   border-radius: 6px;
+   background: transparent;
+   color: inherit;
+   font-size: 12px;
  }
  
  .header__chevron {
