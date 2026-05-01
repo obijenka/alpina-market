@@ -1,3 +1,5 @@
+import { initCitySelect } from "../utils/city.js";
+
 const HEADER_SELECTOR = "header.header";
 
 function initMobileMenu() {
@@ -41,14 +43,11 @@ export function mountHeader() {
       <div class="header__top">
         <div class="container header__top-inner">
           <div class="header__top-left">
-            <button class="header__city" type="button">
-              Санкт-Петербург
-              <img
-                class="header__chevron"
-                src="assets/icons/chevron.svg"
-                alt="chevron"
-              />
-            </button>
+            <select class="header__city" id="citySelect" aria-label="Город">
+              <option value="Минск">Минск</option>
+              <option value="Гомель">Гомель</option>
+              <option value="Брест">Брест</option>
+            </select>
 
             <select class="header__theme" id="themeSelect" aria-label="Тема">
               <option value="light">Светлая</option>
@@ -164,4 +163,5 @@ export function mountHeader() {
   `.trim();
 
   initMobileMenu();
+  initCitySelect();
 }

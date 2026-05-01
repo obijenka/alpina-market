@@ -57,6 +57,15 @@
    letter-spacing: 0.5px;
  }
 
+ .header__city {
+   height: 28px;
+   padding: 0 10px;
+   border: 1px solid var(--line);
+   border-radius: 6px;
+   background: transparent;
+   color: inherit;
+ }
+
  .header__theme {
    height: 28px;
    padding: 0 10px;

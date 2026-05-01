@@ -9,6 +9,25 @@
   opacity: 0.78;
 }
 
+.salons-page__search {
+  margin-bottom: 18px;
+}
+
+.salons-page__search-input {
+  width: 100%;
+  max-width: 520px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  outline: none;
+}
+
+.salons-page__search-input:focus {
+  border-color: rgba(7, 146, 148, 0.65);
+}
+
 .salons-page__map {
   overflow: hidden;
   min-height: 560px;
