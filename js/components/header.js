@@ -123,7 +123,7 @@ export function mountHeader() {
             <a class="header__submenu-link" href="catalog.html">Мебельная фурнитура и комплектующие</a>
             <a class="header__submenu-link" href="catalog.html">Товары для дома</a>
             <a class="header__submenu-link" href="catalog.html">Плитка, керамогранит и мозаика</a>
-            <a class="header__submenu-link" href="catalog.html">Акции</a>
+            <a class="header__submenu-link" href="sales.html">Акции</a>
           </nav>
         </div>
       </div>
@@ -143,7 +143,7 @@ export function mountHeader() {
             <a class="mobile-menu__link" href="#">Каталог по комнатам</a>
             <a class="mobile-menu__link" href="#">Дизайн-проекты</a>
             <a class="mobile-menu__link" href="#">Мебель на заказ</a>
-            <a class="mobile-menu__link" href="#">Акции</a>
+            <a class="mobile-menu__link" href="sales.html">Акции</a>
           </div>
 
           <div class="mobile-menu__section">

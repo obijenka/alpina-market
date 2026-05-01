@@ -3,6 +3,13 @@ function createOfferCard(offer) {
   card.className = "offer-card";
   card.dataset.offerId = offer.id;
 
+  const oldPrice =
+    offer.oldPriceText ??
+    (typeof offer.oldPrice === "number"
+      ? `${offer.oldPrice.toLocaleString("ru-RU")} руб.`
+      : offer.oldPrice);
+  const hasOldPrice = oldPrice != null && String(oldPrice).trim() !== "";
+
   card.innerHTML = `
   <div class="offer-card__inner">
      <div class="offer-card__badge">${offer.badge ?? ""}</div>
@@ -16,7 +23,10 @@ function createOfferCard(offer) {
     <div class="offer-card__content">
       <div class="offer-card__row">
         <div class="offer-card__title">${String(offer.title).replaceAll("\n", "<br />")}</div>
-        <div class="offer-card__price">${offer.price}</div>
+        <div class="offer-card__prices">
+          <div class="offer-card__price">${offer.price}</div>
+          ${hasOldPrice ? `<div class="offer-card__old-price">${oldPrice}</div>` : ""}
+        </div>
       </div>
       <div class="offer-card__sizes">${offer.size}</div>
       <div class="offer-card__bottom">

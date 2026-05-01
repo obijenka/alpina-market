@@ -22,6 +22,15 @@ function productToOfferLike(product) {
   return {
     ...product,
     price: product.priceText ?? (typeof product.price === "number" ? `${product.price.toLocaleString("ru-RU")} руб.` : product.price),
+    oldPrice:
+      product.oldPrice != null && product.oldPrice !== ""
+        ? product.oldPrice
+        : product.oldPriceNumber != null && product.oldPriceNumber !== ""
+          ? product.oldPriceNumber
+          : undefined,
+    oldPriceText:
+      product.oldPriceText ??
+      (typeof product.oldPrice === "number" ? `${product.oldPrice.toLocaleString("ru-RU")} руб.` : undefined),
     image: product.image ?? product.images?.[0],
     size: product.size ?? product.attributes?.size ?? "",
     badge: product.badge ?? product.promoLabel ?? "",

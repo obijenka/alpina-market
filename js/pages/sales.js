@@ -1,5 +1,5 @@
 import { renderOffers } from "../renderers/offers.js";
-import { openAuthModal, initAuthModal } from "../auth/authModal.js";
+import { initAuthModal, openAuthModal } from "../auth/authModal.js";
 import {
   addOfferToCart,
   getCartItems,
@@ -15,35 +15,15 @@ import { applySavedTheme, initThemeSelect } from "../utils/theme.js";
 
 applySavedTheme();
 
-function norm(value) {
-  return String(value ?? "")
-    .toLowerCase()
-    .replace(/ё/g, "е")
-    .trim();
-}
-
-function collectSearchHaystack(product) {
-  const parts = [];
-
-  parts.push(product?.id);
-  parts.push(product?.sku);
-  parts.push(product?.title);
-  parts.push(product?.description);
-  parts.push(product?.category);
-
-  if (Array.isArray(product?.categories)) parts.push(product.categories.join(" "));
-  if (Array.isArray(product?.tags)) parts.push(product.tags.join(" "));
-  if (Array.isArray(product?.searchKeywords)) parts.push(product.searchKeywords.join(" "));
-
-  const attrs = product?.attributes && typeof product.attributes === "object" ? product.attributes : null;
-  if (attrs) {
-    Object.entries(attrs).forEach(([k, v]) => {
-      parts.push(k);
-      parts.push(v);
-    });
-  }
-
-  return norm(parts.filter(Boolean).join(" "));
+function getDiscountedProducts(products) {
+  const list = Array.isArray(products) ? products : [];
+  return list.filter((p) => {
+    const price = Number(p?.price);
+    const oldPrice = Number(p?.oldPrice);
+    if (Number.isFinite(price) && Number.isFinite(oldPrice) && oldPrice > price) return true;
+    const badge = String(p?.badge ?? p?.promoLabel ?? "").toLowerCase();
+    return badge.includes("%") || badge.includes("акц") || badge.includes("скид");
+  });
 }
 
 function productToOfferLike(product) {
@@ -94,92 +74,62 @@ async function syncOfferCartButtons(rootEl) {
   });
 }
 
-function getQuery() {
-  const url = new URL(window.location.href);
-  return String(url.searchParams.get("q") ?? "").trim();
-}
-
-function setHeaderSearchValue(q) {
-  const input = document.querySelector(".header__search-input");
-  if (input instanceof HTMLInputElement) input.value = q;
-}
-
-async function renderSearch() {
-  const q = getQuery();
-  setHeaderSearchValue(q);
-
-  const grid = document.getElementById("searchGrid");
-  const meta = document.getElementById("searchMeta");
-  const empty = document.getElementById("searchEmpty");
+async function renderSales() {
+  const grid = document.getElementById("salesGrid");
+  const meta = document.getElementById("salesMeta");
+  const empty = document.getElementById("salesEmpty");
 
   const products = await getProducts();
-  const list = Array.isArray(products) ? products : [];
+  const discounted = getDiscountedProducts(products);
+  const offerLike = discounted.map(productToOfferLike);
 
-  const queryNorm = norm(q);
-  const tokens = queryNorm.split(/\s+/).filter(Boolean);
-
-  const items = tokens.length
-    ? list.filter((p) => {
-        const hay = collectSearchHaystack(p);
-        return tokens.every((t) => hay.includes(t));
-      })
-    : [];
-
-  const offerLike = items.map(productToOfferLike);
-
-  if (meta) {
-    meta.textContent = tokens.length ? `Запрос: ${q} — найдено: ${items.length}` : "Введите запрос в поиске";
-  }
-
-  if (empty) {
-    empty.style.display = tokens.length && items.length === 0 ? "block" : "none";
-  }
+  if (meta) meta.textContent = `Товаров со скидкой: ${discounted.length}`;
+  if (empty) empty.style.display = discounted.length === 0 ? "block" : "none";
 
   renderOffers(offerLike, grid);
   await syncOfferFavIcons(grid);
   await syncOfferCartButtons(grid);
-
-  if (grid) {
-    grid.addEventListener("click", (e) => {
-      void (async () => {
-        const target = e.target;
-        if (!(target instanceof Element)) return;
-
-        const card = target.closest(".offer-card");
-        if (!(card instanceof HTMLElement)) return;
-        const offerId = String(card.dataset.offerId ?? "").trim();
-        if (!offerId) return;
-
-        const favBtn = target.closest(".offer-card__fav");
-        if (favBtn) {
-          e.preventDefault();
-          const session = await getSession();
-          if (session?.role !== "user") {
-            openAuthModal();
-            return;
-          }
-          await toggleWishlistOffer(offerId);
-          await syncOfferFavIcons(grid);
-          return;
-        }
-
-        const cartBtn = target.closest(".offer-card__cart");
-        if (cartBtn) {
-          e.preventDefault();
-          await addOfferToCart(offerId, 1);
-          await syncOfferCartButtons(grid);
-          return;
-        }
-
-        e.preventDefault();
-        window.location.href = `product.html?id=${encodeURIComponent(offerId)}`;
-      })();
-    });
-  }
 }
 
-async function initSearch() {
-  await renderSearch();
+function initGridActions() {
+  const grid = document.getElementById("salesGrid");
+  if (!grid) return;
+
+  grid.addEventListener("click", (e) => {
+    void (async () => {
+      const target = e.target;
+      if (!(target instanceof Element)) return;
+
+      const card = target.closest(".offer-card");
+      if (!(card instanceof HTMLElement)) return;
+      const offerId = String(card.dataset.offerId ?? "").trim();
+      if (!offerId) return;
+
+      const favBtn = target.closest(".offer-card__fav");
+      if (favBtn) {
+        e.preventDefault();
+        const session = await getSession();
+        if (session?.role !== "user") {
+          openAuthModal();
+          return;
+        }
+        await toggleWishlistOffer(offerId);
+        await syncOfferFavIcons(grid);
+        return;
+      }
+
+      const cartBtn = target.closest(".offer-card__cart");
+      if (cartBtn) {
+        e.preventDefault();
+        await addOfferToCart(offerId, 1);
+        await syncOfferCartButtons(grid);
+        return;
+      }
+
+      e.preventDefault();
+      window.location.href = `product.html?id=${encodeURIComponent(offerId)}`;
+    })();
+  });
 }
 
 function initHeaderActions() {
@@ -203,14 +153,16 @@ document.addEventListener("DOMContentLoaded", () => {
   mountLayout();
   initThemeSelect();
   initAuthModal();
-  void initSearch();
+
+  initGridActions();
   initHeaderActions();
+  void renderSales();
 
   document.addEventListener("alpina:session-changed", () => {
     void (async () => {
       await migrateGuestWishlistAndCartToUser();
       await migrateGuestOrdersToUser();
-      await renderSearch();
+      await renderSales();
     })();
   });
 });
