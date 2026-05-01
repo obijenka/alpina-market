@@ -1,5 +1,5 @@
 import { renderOffers } from "../renderers/offers.js";
-import { initAuthModal, openAuthModal } from "../auth/authModal.js";
+import { openAuthModal, initAuthModal } from "../auth/authModal.js";
 import {
   addOfferToCart,
   getCartItems,
@@ -10,6 +10,10 @@ import {
   migrateGuestWishlistAndCartToUser,
   toggleWishlistOffer,
 } from "../services/index.js";
+import { mountLayout } from "../utils/layout.js";
+import { applySavedTheme, initThemeSelect } from "../utils/theme.js";
+
+applySavedTheme();
 
 function norm(value) {
   return String(value ?? "")
@@ -165,19 +169,11 @@ async function renderSearch() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  void renderSearch();
+async function initSearch() {
+  await renderSearch();
+}
 
-  initAuthModal();
-
-  document.addEventListener("alpina:session-changed", () => {
-    void (async () => {
-      await migrateGuestWishlistAndCartToUser();
-      await migrateGuestOrdersToUser();
-      await renderSearch();
-    })();
-  });
-
+function initHeaderActions() {
   const profileAction = document.querySelector("#profileAction");
   if (profileAction) {
     profileAction.addEventListener("click", (e) => {
@@ -192,35 +188,20 @@ document.addEventListener("DOMContentLoaded", () => {
       })();
     });
   }
+}
 
-  const burger = document.querySelector(".header__burger");
-  const menu = document.querySelector(".mobile-menu");
-  const closeEls = document.querySelectorAll("[data-menu-close]");
+document.addEventListener("DOMContentLoaded", () => {
+  mountLayout();
+  initThemeSelect();
+  initAuthModal();
+  void initSearch();
+  initHeaderActions();
 
-  function openMenu() {
-    if (!menu) return;
-    menu.classList.add("is-open");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeMenu() {
-    if (!menu) return;
-    menu.classList.remove("is-open");
-    document.body.style.overflow = "";
-  }
-
-  if (burger && menu) burger.addEventListener("click", openMenu);
-  closeEls.forEach((el) => el.addEventListener("click", closeMenu));
-
-  if (menu) {
-    menu.addEventListener("click", (e) => {
-      const target = e.target;
-      if (!(target instanceof Element)) return;
-      if (target.closest("a")) closeMenu();
-    });
-  }
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
+  document.addEventListener("alpina:session-changed", () => {
+    void (async () => {
+      await migrateGuestWishlistAndCartToUser();
+      await migrateGuestOrdersToUser();
+      await renderSearch();
+    })();
   });
 });

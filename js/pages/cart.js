@@ -12,6 +12,10 @@ import {
   updateCartOfferQty,
 } from "../services/index.js";
 import { bindBookingModalTrigger, initBookingModal } from "../booking/bookingModal.js";
+import { mountLayout } from "../utils/layout.js";
+import { applySavedTheme, initThemeSelect } from "../utils/theme.js";
+
+applySavedTheme();
 
 let OFFERS_CACHE = [];
 
@@ -318,28 +322,9 @@ function initHeaderActions() {
   });
 }
 
-function initMobileMenu() {
-  const burger = document.querySelector(".header__burger");
-  const menu = document.querySelector(".mobile-menu");
-  const closeEls = document.querySelectorAll("[data-menu-close]");
-
-  function openMenu() {
-    if (!menu) return;
-    menu.classList.add("is-open");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeMenu() {
-    if (!menu) return;
-    menu.classList.remove("is-open");
-    document.body.style.overflow = "";
-  }
-
-  if (burger) burger.addEventListener("click", openMenu);
-  closeEls.forEach((el) => el.addEventListener("click", closeMenu));
-}
-
 document.addEventListener("DOMContentLoaded", () => {
+  mountLayout();
+  initThemeSelect();
   void (async () => {
     OFFERS_CACHE = await getOffers();
     await renderCart();
@@ -352,5 +337,4 @@ document.addEventListener("DOMContentLoaded", () => {
   initCartEvents();
   initCheckout();
   initHeaderActions();
-  initMobileMenu();
 });

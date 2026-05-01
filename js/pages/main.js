@@ -14,6 +14,7 @@ import {
 } from "../services/index.js";
 import { bindBookingModalTrigger, initBookingModal } from "../booking/bookingModal.js";
 import { applySavedTheme, initThemeSelect } from "../utils/theme.js";
+import { mountLayout } from "../utils/layout.js";
 
 applySavedTheme();
 
@@ -47,6 +48,7 @@ async function syncOfferCartButtons(rootEl) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  mountLayout();
   initThemeSelect();
   void (async () => {
     const offersGrid = document.getElementById("offersGrid");
@@ -120,39 +122,5 @@ document.addEventListener("DOMContentLoaded", () => {
       await syncOfferFavIcons(offersGrid);
       await syncOfferCartButtons(offersGrid);
     })();
-  });
-
-  const burger = document.querySelector(".header__burger");
-  const menu = document.querySelector(".mobile-menu");
-  const closeEls = document.querySelectorAll("[data-menu-close]");
-
-  function openMenu() {
-    if (!menu) return;
-    menu.classList.add("is-open");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeMenu() {
-    if (!menu) return;
-    menu.classList.remove("is-open");
-    document.body.style.overflow = "";
-  }
-
-  if (burger && menu) {
-    burger.addEventListener("click", openMenu);
-  }
-
-  closeEls.forEach((el) => el.addEventListener("click", closeMenu));
-
-  if (menu) {
-    menu.addEventListener("click", (e) => {
-      const target = e.target;
-      if (!(target instanceof Element)) return;
-      if (target.closest("a")) closeMenu();
-    });
-  }
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
   });
 });

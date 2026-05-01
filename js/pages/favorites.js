@@ -1,5 +1,5 @@
 import { renderOffers } from "../renderers/offers.js";
-import { initAuthModal, openAuthModal } from "../auth/authModal.js";
+import { openAuthModal, initAuthModal } from "../auth/authModal.js";
 import {
   addOfferToCart,
   getCartItems,
@@ -10,6 +10,10 @@ import {
   migrateGuestWishlistAndCartToUser,
   toggleWishlistOffer,
 } from "../services/index.js";
+import { mountLayout } from "../utils/layout.js";
+import { applySavedTheme, initThemeSelect } from "../utils/theme.js";
+
+applySavedTheme();
 
 async function syncOfferFavIcons(rootEl) {
   if (!rootEl) return;
@@ -58,6 +62,9 @@ async function renderWishlist() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  mountLayout();
+  initThemeSelect();
+  initAuthModal();
   void renderWishlist();
 
   const grid = document.getElementById("favoritesGrid");
@@ -94,8 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  initAuthModal();
-
   const profileAction = document.querySelector("#profileAction");
   if (profileAction) {
     profileAction.addEventListener("click", (e) => {
@@ -118,23 +123,4 @@ document.addEventListener("DOMContentLoaded", () => {
       await renderWishlist();
     })();
   });
-
-  const burger = document.querySelector(".header__burger");
-  const menu = document.querySelector(".mobile-menu");
-  const closeEls = document.querySelectorAll("[data-menu-close]");
-
-  function openMenu() {
-    if (!menu) return;
-    menu.classList.add("is-open");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeMenu() {
-    if (!menu) return;
-    menu.classList.remove("is-open");
-    document.body.style.overflow = "";
-  }
-
-  if (burger) burger.addEventListener("click", openMenu);
-  closeEls.forEach((el) => el.addEventListener("click", closeMenu));
 });

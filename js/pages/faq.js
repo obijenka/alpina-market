@@ -1,5 +1,9 @@
-import { initAuthModal, openAuthModal } from "../auth/authModal.js";
 import { getFaq, getSession } from "../services/index.js";
+import { initAuthModal, openAuthModal } from "../auth/authModal.js";
+import { mountLayout } from "../utils/layout.js";
+import { applySavedTheme, initThemeSelect } from "../utils/theme.js";
+
+applySavedTheme();
 
 function escapeHtml(value) {
   return String(value)
@@ -92,6 +96,8 @@ function initFaqAccordion() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  mountLayout();
+  initThemeSelect();
   initAuthModal();
   const profileAction = document.querySelector("#profileAction");
   if (profileAction) {
@@ -114,38 +120,4 @@ document.addEventListener("DOMContentLoaded", () => {
     renderFaq(list, items);
     initFaqAccordion();
   })();
-
-  const burger = document.querySelector(".header__burger");
-  const menu = document.querySelector(".mobile-menu");
-  const closeEls = document.querySelectorAll("[data-menu-close]");
-
-  function openMenu() {
-    if (!menu) return;
-    menu.classList.add("is-open");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeMenu() {
-    if (!menu) return;
-    menu.classList.remove("is-open");
-    document.body.style.overflow = "";
-  }
-
-  if (burger && menu) {
-    burger.addEventListener("click", openMenu);
-  }
-
-  closeEls.forEach((el) => el.addEventListener("click", closeMenu));
-
-  if (menu) {
-    menu.addEventListener("click", (e) => {
-      const target = e.target;
-      if (!(target instanceof Element)) return;
-      if (target.closest("a")) closeMenu();
-    });
-  }
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
-  });
 });
