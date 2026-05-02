@@ -6,6 +6,10 @@ body[data-theme="dark"] {
   color: var(--text);
 }
 
+body[data-theme="dark"][data-a11y="on"] {
+  --muted: rgba(255, 255, 255, 0.92);
+}
+
 body[data-theme="dark"] .footer__btn {
   border-color: #fff;
 }

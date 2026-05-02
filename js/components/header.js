@@ -1,6 +1,7 @@
 import { initCityDropdown } from "../utils/city.js";
 import { initThemeDropdown } from "../utils/theme.js";
 import { bindBookingModalTrigger, initBookingModal } from "../booking/bookingModal.js";
+import { applySavedA11yMode, getSavedA11yMode, toggleA11yMode } from "../utils/a11y.js";
 
 const HEADER_SELECTOR = "header.header";
 
@@ -67,6 +68,8 @@ export function mountHeader() {
                 <button class="header__dropdown-option" type="button" data-theme-value="dark">Темная</button>
               </div>
             </div>
+
+            <button class="header__a11y" type="button" id="a11yToggle" aria-pressed="false">Aа</button>
           </div>
 
           <nav class="header__top-nav" aria-label="Верхнее меню">
@@ -179,6 +182,17 @@ export function mountHeader() {
   initMobileMenu();
   initCityDropdown();
   initThemeDropdown();
+
+  applySavedA11yMode();
+  const a11yToggle = document.getElementById("a11yToggle");
+  if (a11yToggle instanceof HTMLButtonElement) {
+    const isOn = getSavedA11yMode() === "on";
+    a11yToggle.setAttribute("aria-pressed", String(isOn));
+    a11yToggle.addEventListener("click", () => {
+      const next = toggleA11yMode();
+      a11yToggle.setAttribute("aria-pressed", String(next === "on"));
+    });
+  }
 
   initBookingModal();
   bindBookingModalTrigger({ selector: "#bookingAction" });

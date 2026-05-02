@@ -1,0 +1,97 @@
+body[data-a11y="on"] {
+  font-size: 18px;
+  line-height: 26px;
+  letter-spacing: 0.6px;
+}
+
+body[data-a11y="on"] :focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+body[data-a11y="on"] .footer__top-inner {
+  grid-template-columns: 227px 123px 200px 116px 273px 77px 213px;
+}
+
+body[data-a11y="on"] .rooms__grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+body[data-a11y="on"] .categories__grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+body[data-a11y="on"] .offers__grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+body[data-a11y="on"] .collections__grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+body[data-a11y="on"] .recent__grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+body[data-a11y="on"] .offer-card {
+  max-height: none;
+}
+
+body[data-a11y="on"] .header__top-link,
+body[data-a11y="on"] .header__menu-link,
+body[data-a11y="on"] .header__submenu-link {
+  padding: 10px 6px;
+}
+
+body[data-a11y="on"] .header__dropdown-btn,
+body[data-a11y="on"] .header__a11y {
+  height: 36px;
+  font-size: 16px;
+  gap: 10px;
+}
+
+body[data-a11y="on"] .header__search-input {
+  font-size: 16px;
+}
+
+body[data-a11y="on"] .header__phone {
+  font-size: 16px;
+}
+
+body[data-a11y="on"] .header__dropdown-option {
+  padding: 12px 12px;
+  font-size: 16px;
+}
+
+body[data-a11y="on"] .section-head__title,
+body[data-a11y="on"] h1,
+body[data-a11y="on"] h2 {
+  letter-spacing: 0.8px;
+}
+
+body[data-a11y="on"] .header__top,
+body[data-a11y="on"] .header__main,
+body[data-a11y="on"] .header__bottom {
+  border-color: var(--line);
+}
+
+body[data-a11y="on"] {
+  --muted: rgba(0, 0, 0, 0.85);
+}
+
+body[data-a11y="on"] * {
+  text-rendering: geometricPrecision;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+body[data-a11y="on"] * {
+  transition: none !important;
+}
