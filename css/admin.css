@@ -121,6 +121,65 @@ body {
   border-radius: 6px;
 }
 
+.admin-dropdown {
+  position: relative;
+}
+
+.admin-dropdown__btn {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  color: inherit;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.admin-dropdown__label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  padding: 6px;
+  display: none;
+  z-index: 20;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.admin-dropdown.is-open .admin-dropdown__menu {
+  display: grid;
+  gap: 2px;
+}
+
+.admin-dropdown__option {
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  text-align: left;
+  border-radius: 8px;
+  cursor: pointer;
+  color: inherit;
+}
+
+.admin-dropdown__option:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
 .admin-form__error {
   min-height: 18px;
   font-size: 12px;

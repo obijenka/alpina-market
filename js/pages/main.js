@@ -12,7 +12,6 @@ import {
   migrateGuestWishlistAndCartToUser,
   toggleWishlistOffer,
 } from "../services/index.js";
-import { bindBookingModalTrigger, initBookingModal } from "../booking/bookingModal.js";
 import { applySavedTheme, initThemeSelect } from "../utils/theme.js";
 import { mountLayout } from "../utils/layout.js";
 
@@ -96,9 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   initAuthModal();
-
-  initBookingModal();
-  bindBookingModalTrigger({ selector: "#bookingAction" });
 
   const profileAction = document.querySelector("#profileAction");
   if (profileAction) {

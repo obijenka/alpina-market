@@ -43,27 +43,124 @@ function getProductCategories(product) {
 }
 
 function getSelectedCategory() {
-  const select = document.getElementById("catalogCategory");
-  if (!(select instanceof HTMLSelectElement)) return "";
-  return select.value;
+  const input = document.getElementById("catalogCategory");
+  if (!(input instanceof HTMLInputElement)) return "";
+  return input.value;
 }
 
 function fillCategoryFilter(products) {
-  const select = document.getElementById("catalogCategory");
-  if (!(select instanceof HTMLSelectElement)) return;
+  const root = document.querySelector("[data-catalog-category-dropdown]");
+  const input = document.getElementById("catalogCategory");
+  if (!(root instanceof HTMLElement)) return;
+  if (!(input instanceof HTMLInputElement)) return;
 
-  const current = select.value;
+  const button = root.querySelector("[data-dropdown-button]");
+  const menu = root.querySelector("[data-dropdown-menu]");
+  const label = root.querySelector("[data-dropdown-label]");
+  if (!(button instanceof HTMLElement) || !(menu instanceof HTMLElement)) return;
+
+  const current = input.value;
   const categories = Array.from(new Set(products.flatMap(getProductCategories))).sort((a, b) => a.localeCompare(b, "ru"));
 
-  select.innerHTML = '<option value="">Все категории</option>';
+  function getLabelText(value) {
+    return value ? String(value) : "Все категории";
+  }
+
+  input.value = categories.includes(current) ? current : "";
+  if (label instanceof HTMLElement) label.textContent = getLabelText(input.value);
+
+  menu.innerHTML = "";
+
+  const allBtn = document.createElement("button");
+  allBtn.type = "button";
+  allBtn.className = "catalog-dropdown__option";
+  allBtn.setAttribute("data-category-value", "");
+  allBtn.textContent = "Все категории";
+  menu.appendChild(allBtn);
+
   categories.forEach((category) => {
-    const option = document.createElement("option");
-    option.value = category;
-    option.textContent = category;
-    select.append(option);
+    const opt = document.createElement("button");
+    opt.type = "button";
+    opt.className = "catalog-dropdown__option";
+    opt.setAttribute("data-category-value", category);
+    opt.textContent = category;
+    menu.appendChild(opt);
+  });
+}
+
+function initCatalogCategoryDropdown({
+  rootSelector = "[data-catalog-category-dropdown]",
+  buttonSelector = "[data-dropdown-button]",
+  menuSelector = "[data-dropdown-menu]",
+  optionSelector = "[data-category-value]",
+  labelSelector = "[data-dropdown-label]",
+  inputSelector = "#catalogCategory",
+} = {}) {
+  const root = document.querySelector(rootSelector);
+  if (!(root instanceof HTMLElement)) return;
+
+  const button = root.querySelector(buttonSelector);
+  const menu = root.querySelector(menuSelector);
+  const label = root.querySelector(labelSelector);
+  const input = document.querySelector(inputSelector);
+
+  if (!(button instanceof HTMLElement) || !(menu instanceof HTMLElement)) return;
+  if (!(input instanceof HTMLInputElement)) return;
+
+  function setLabel(value) {
+    if (!(label instanceof HTMLElement)) return;
+    label.textContent = value ? String(value) : "Все категории";
+  }
+
+  function close() {
+    root.classList.remove("is-open");
+    button.setAttribute("aria-expanded", "false");
+  }
+
+  function open() {
+    root.classList.add("is-open");
+    button.setAttribute("aria-expanded", "true");
+  }
+
+  function toggle() {
+    if (root.classList.contains("is-open")) close();
+    else open();
+  }
+
+  function setValue(next) {
+    const value = String(next ?? "");
+    input.value = value;
+    setLabel(value);
+  }
+
+  setValue(input.value);
+
+  button.addEventListener("click", (e) => {
+    e.preventDefault();
+    toggle();
   });
 
-  select.value = categories.includes(current) ? current : "";
+  root.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+    const opt = target.closest(optionSelector);
+    if (!(opt instanceof HTMLElement)) return;
+    e.preventDefault();
+    const value = String(opt.getAttribute("data-category-value") ?? "");
+    setValue(value);
+    close();
+    void renderCatalog();
+  });
+
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof Node)) return;
+    if (!root.contains(target)) close();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") close();
+  });
 }
 
 async function syncOfferFavIcons(rootEl) {
@@ -124,13 +221,7 @@ async function loadCatalog() {
 
 function initCatalogEvents() {
   const grid = document.getElementById("catalogGrid");
-  const categorySelect = document.getElementById("catalogCategory");
-
-  if (categorySelect instanceof HTMLSelectElement) {
-    categorySelect.addEventListener("change", () => {
-      void renderCatalog();
-    });
-  }
+  initCatalogCategoryDropdown();
 
   if (grid) {
     grid.addEventListener("click", (e) => {

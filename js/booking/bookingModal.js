@@ -1,6 +1,87 @@
 import { mountBookingModalMarkup } from "./bookingModalMarkup.js";
 import { getCurrentUser } from "../services/index.js";
 
+function initBookingTopicDropdown({
+  rootSelector = "[data-booking-topic-dropdown]",
+  buttonSelector = "[data-dropdown-button]",
+  menuSelector = "[data-dropdown-menu]",
+  optionSelector = "[data-topic-value]",
+  labelSelector = "[data-dropdown-label]",
+  inputSelector = "input[name='topic']",
+} = {}) {
+  const root = document.querySelector(rootSelector);
+  if (!(root instanceof HTMLElement)) return;
+
+  const button = root.querySelector(buttonSelector);
+  const menu = root.querySelector(menuSelector);
+  const label = root.querySelector(labelSelector);
+  const hiddenInput = root.querySelector(inputSelector);
+
+  if (!(button instanceof HTMLElement) || !(menu instanceof HTMLElement)) return;
+  if (!(hiddenInput instanceof HTMLInputElement)) return;
+
+  const options = Array.from(root.querySelectorAll(optionSelector)).filter((el) => el instanceof HTMLElement);
+  if (options.length === 0) return;
+
+  const labels = {
+    consult: "Консультация дизайнера",
+    measure: "Замер",
+    selection: "Подбор мебели",
+  };
+
+  function setLabel(value) {
+    if (!(label instanceof HTMLElement)) return;
+    label.textContent = labels[value] ?? "Выберите…";
+  }
+
+  function close() {
+    root.classList.remove("is-open");
+    button.setAttribute("aria-expanded", "false");
+  }
+
+  function open() {
+    root.classList.add("is-open");
+    button.setAttribute("aria-expanded", "true");
+  }
+
+  function toggle() {
+    if (root.classList.contains("is-open")) close();
+    else open();
+  }
+
+  function setValue(next) {
+    const value = String(next ?? "");
+    hiddenInput.value = value;
+    setLabel(value);
+  }
+
+  setValue(hiddenInput.value);
+
+  button.addEventListener("click", (e) => {
+    e.preventDefault();
+    toggle();
+  });
+
+  options.forEach((opt) => {
+    opt.addEventListener("click", (e) => {
+      e.preventDefault();
+      const value = String(opt.getAttribute("data-topic-value") ?? "");
+      setValue(value);
+      close();
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof Node)) return;
+    if (!root.contains(target)) close();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") close();
+  });
+}
+
 function getEls() {
   const modal = document.querySelector(".booking-modal");
   const closeEls = document.querySelectorAll("[data-booking-close]");
@@ -126,6 +207,7 @@ export function initBookingModal() {
 
   initCloseLogic();
   initForm();
+  initBookingTopicDropdown();
 }
 
 export function bindBookingModalTrigger({ selector }) {

@@ -143,12 +143,12 @@
       ],
       "cart": [
         {
-          "offerId": "5",
+          "offerId": "2",
           "qty": 1
         },
         {
           "offerId": "8",
-          "qty": 1
+          "qty": 4
         },
         {
           "offerId": "7743349b-6eb0-4407-9bbd-af6c3283d4dd",
@@ -156,16 +156,16 @@
         },
         {
           "offerId": "6",
-          "qty": 1
+          "qty": 2
         },
         {
           "offerId": "1",
-          "qty": 6
+          "qty": 7
         }
       ],
       "orders": [],
       "createdAt": "2026-04-27T12:47:14.853Z",
-      "updatedAt": "2026-05-01T20:33:12.632Z"
+      "updatedAt": "2026-05-02T09:30:45.912Z"
     },
     {
       "id": "2ec90f67-3e4b-477a-83f5-265631e14126",
@@ -696,6 +696,6 @@
     "role": "user",
     "userId": "7fc31798-cd1f-41ee-8cf9-cf8c2ac9386f",
     "login": "Лиза2",
-    "createdAt": "2026-05-01T15:38:44.020Z"
+    "createdAt": "2026-05-02T09:30:36.469Z"
   }
 }

@@ -9,6 +9,85 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function initReviewStatusDropdown(
+  row,
+  {
+    rootSelector = "[data-review-status-dropdown]",
+    buttonSelector = "[data-dropdown-button]",
+    menuSelector = "[data-dropdown-menu]",
+    optionSelector = "[data-status-value]",
+    labelSelector = "[data-dropdown-label]",
+    inputSelector = "[data-review-status]",
+  } = {}
+) {
+  if (!(row instanceof HTMLElement)) return;
+  const root = row.querySelector(rootSelector);
+  if (!(root instanceof HTMLElement)) return;
+
+  const button = root.querySelector(buttonSelector);
+  const menu = root.querySelector(menuSelector);
+  const label = root.querySelector(labelSelector);
+  const hiddenInput = root.querySelector(inputSelector);
+
+  if (!(button instanceof HTMLElement) || !(menu instanceof HTMLElement)) return;
+  if (!(hiddenInput instanceof HTMLInputElement)) return;
+
+  const options = Array.from(root.querySelectorAll(optionSelector)).filter((el) => el instanceof HTMLElement);
+  if (options.length === 0) return;
+
+  function setLabel(value) {
+    if (!(label instanceof HTMLElement)) return;
+    label.textContent = String(value ?? "");
+  }
+
+  function close() {
+    root.classList.remove("is-open");
+    button.setAttribute("aria-expanded", "false");
+  }
+
+  function open() {
+    root.classList.add("is-open");
+    button.setAttribute("aria-expanded", "true");
+  }
+
+  function toggle() {
+    if (root.classList.contains("is-open")) close();
+    else open();
+  }
+
+  function setValue(next) {
+    const value = String(next ?? "pending");
+    hiddenInput.value = value;
+    setLabel(value);
+  }
+
+  setValue(hiddenInput.value);
+
+  button.addEventListener("click", (e) => {
+    e.preventDefault();
+    toggle();
+  });
+
+  options.forEach((opt) => {
+    opt.addEventListener("click", (e) => {
+      e.preventDefault();
+      const value = String(opt.getAttribute("data-status-value") ?? "pending");
+      setValue(value);
+      close();
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof Node)) return;
+    if (!root.contains(target)) close();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") close();
+  });
+}
+
 export async function renderReviews() {
   const list = document.querySelector("#adminReviewsList");
   if (!list) return;
@@ -50,11 +129,18 @@ export async function renderReviews() {
 
               <label class="admin-field">
                 <div class="admin-field__label">Статус</div>
-                <select class="admin-field__input" data-review-status>
-                  <option value="pending" ${status === "pending" ? "selected" : ""}>pending</option>
-                  <option value="approved" ${status === "approved" ? "selected" : ""}>approved</option>
-                  <option value="hidden" ${status === "hidden" ? "selected" : ""}>hidden</option>
-                </select>
+                <div class="admin-dropdown" data-review-status-dropdown>
+                  <input type="hidden" data-review-status value="${status}" />
+                  <button class="admin-dropdown__btn" type="button" data-dropdown-button aria-haspopup="listbox" aria-expanded="false">
+                    <span class="admin-dropdown__label" data-dropdown-label>${status}</span>
+                    <img class="admin-dropdown__chevron" src="assets/icons/chevron.svg" alt="chevron" />
+                  </button>
+                  <div class="admin-dropdown__menu" data-dropdown-menu role="listbox">
+                    <button class="admin-dropdown__option" type="button" data-status-value="pending">pending</button>
+                    <button class="admin-dropdown__option" type="button" data-status-value="approved">approved</button>
+                    <button class="admin-dropdown__option" type="button" data-status-value="hidden">hidden</button>
+                  </div>
+                </div>
               </label>
 
               <div style="display:flex; gap:10px; flex-wrap:wrap;">
@@ -74,6 +160,8 @@ export async function renderReviews() {
     const productId = row.getAttribute("data-review-product-id") ?? "";
     if (!reviewId) return;
 
+    initReviewStatusDropdown(row);
+
     const saveBtn = row.querySelector("[data-review-save]");
     if (saveBtn instanceof HTMLButtonElement) {
       saveBtn.addEventListener("click", () => {
@@ -84,7 +172,7 @@ export async function renderReviews() {
 
           const text = textEl instanceof HTMLTextAreaElement ? textEl.value : "";
           const rating = ratingEl instanceof HTMLInputElement ? Number(ratingEl.value) : NaN;
-          const status = statusEl instanceof HTMLSelectElement ? statusEl.value : "pending";
+          const status = statusEl instanceof HTMLInputElement ? statusEl.value : "pending";
 
           await updateReview(reviewId, { text, rating, status });
           if (productId) await recomputeProductRating(productId);

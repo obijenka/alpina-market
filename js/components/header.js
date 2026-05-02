@@ -1,4 +1,6 @@
-import { initCitySelect } from "../utils/city.js";
+import { initCityDropdown } from "../utils/city.js";
+import { initThemeDropdown } from "../utils/theme.js";
+import { bindBookingModalTrigger, initBookingModal } from "../booking/bookingModal.js";
 
 const HEADER_SELECTOR = "header.header";
 
@@ -43,20 +45,32 @@ export function mountHeader() {
       <div class="header__top">
         <div class="container header__top-inner">
           <div class="header__top-left">
-            <select class="header__city" id="citySelect" aria-label="Город">
-              <option value="Минск">Минск</option>
-              <option value="Гомель">Гомель</option>
-              <option value="Брест">Брест</option>
-            </select>
+            <div class="header__dropdown" data-city-dropdown>
+              <button class="header__dropdown-btn" type="button" data-dropdown-button aria-haspopup="listbox" aria-expanded="false">
+                <span class="header__dropdown-label" data-dropdown-label>Минск</span>
+                <img class="header__chevron" src="assets/icons/chevron.svg" alt="chevron" />
+              </button>
+              <div class="header__dropdown-menu" data-dropdown-menu role="listbox">
+                <button class="header__dropdown-option" type="button" data-city-value="Минск">Минск</button>
+                <button class="header__dropdown-option" type="button" data-city-value="Гомель">Гомель</button>
+                <button class="header__dropdown-option" type="button" data-city-value="Брест">Брест</button>
+              </div>
+            </div>
 
-            <select class="header__theme" id="themeSelect" aria-label="Тема">
-              <option value="light">Светлая</option>
-              <option value="dark">Темная</option>
-            </select>
+            <div class="header__dropdown" data-theme-dropdown>
+              <button class="header__dropdown-btn" type="button" data-dropdown-button aria-haspopup="listbox" aria-expanded="false">
+                <span class="header__dropdown-label" data-dropdown-label>Светлая</span>
+                <img class="header__chevron" src="assets/icons/chevron.svg" alt="chevron" />
+              </button>
+              <div class="header__dropdown-menu" data-dropdown-menu role="listbox">
+                <button class="header__dropdown-option" type="button" data-theme-value="light">Светлая</button>
+                <button class="header__dropdown-option" type="button" data-theme-value="dark">Темная</button>
+              </div>
+            </div>
           </div>
 
           <nav class="header__top-nav" aria-label="Верхнее меню">
-            <a class="header__top-link" href="#">О нас</a>
+            <a class="header__top-link" href="index.html">Главная</a>
             <a class="header__top-link" href="salons.html">Наши салоны</a>
             <a class="header__top-link" id="bookingAction" href="#">Онлайн-запись</a>
             <a class="header__top-link" href="faq.html">Вопросы и ответы</a>
@@ -163,5 +177,9 @@ export function mountHeader() {
   `.trim();
 
   initMobileMenu();
-  initCitySelect();
+  initCityDropdown();
+  initThemeDropdown();
+
+  initBookingModal();
+  bindBookingModalTrigger({ selector: "#bookingAction" });
 }

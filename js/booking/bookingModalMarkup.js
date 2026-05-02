@@ -23,12 +23,18 @@ export function mountBookingModalMarkup() {
             <form id="bookingForm" autocomplete="off">
               <label class="booking-field">
                 <div class="booking-field__label">Что вас интересует?</div>
-                <select class="booking-field__input" name="topic" required>
-                  <option value="">Выберите…</option>
-                  <option value="consult">Консультация дизайнера</option>
-                  <option value="measure">Замер</option>
-                  <option value="selection">Подбор мебели</option>
-                </select>
+                <div class="booking-dropdown" data-booking-topic-dropdown>
+                  <input type="hidden" name="topic" value="" />
+                  <button class="booking-dropdown__btn" type="button" data-dropdown-button aria-haspopup="listbox" aria-expanded="false">
+                    <span class="booking-dropdown__label" data-dropdown-label>Выберите…</span>
+                    <img class="booking-dropdown__chevron" src="assets/icons/chevron.svg" alt="chevron" />
+                  </button>
+                  <div class="booking-dropdown__menu" data-dropdown-menu role="listbox">
+                    <button class="booking-dropdown__option" type="button" data-topic-value="consult">Консультация дизайнера</button>
+                    <button class="booking-dropdown__option" type="button" data-topic-value="measure">Замер</button>
+                    <button class="booking-dropdown__option" type="button" data-topic-value="selection">Подбор мебели</button>
+                  </div>
+                </div>
               </label>
 
               <label class="booking-field">

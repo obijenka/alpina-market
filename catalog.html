@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/dark-theme.css" />
     <link rel="stylesheet" href="css/auth-modal.css" />
+    <link rel="stylesheet" href="css/booking-modal.css" />
     <link rel="stylesheet" href="css/catalog.css" />
   </head>
 
@@ -26,9 +27,14 @@
 
           <div class="catalog-page__bar">
             <div id="catalogMeta" class="catalog-page__meta"></div>
-            <select id="catalogCategory" class="catalog-page__select" aria-label="Фильтр по категории">
-              <option value="">Все категории</option>
-            </select>
+            <div class="catalog-dropdown" data-catalog-category-dropdown aria-label="Фильтр по категории">
+              <input type="hidden" id="catalogCategory" value="" />
+              <button class="catalog-dropdown__btn" type="button" data-dropdown-button aria-haspopup="listbox" aria-expanded="false">
+                <span class="catalog-dropdown__label" data-dropdown-label>Все категории</span>
+                <img class="catalog-dropdown__chevron" src="assets/icons/chevron.svg" alt="chevron" />
+              </button>
+              <div class="catalog-dropdown__menu" data-dropdown-menu role="listbox"></div>
+            </div>
           </div>
 
           <div id="catalogEmpty" class="catalog-page__empty">Товары не найдены.</div>

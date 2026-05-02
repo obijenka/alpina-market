@@ -18,7 +18,12 @@ body[data-theme="dark"] .offer-card__cart img,
 body[data-theme="dark"] .header__search-btn img,
 body[data-theme="dark"] .footer__social-link img,
 body[data-theme="dark"] .header__logo img,
-body[data-theme="dark"] .header__city img {
+body[data-theme="dark"] .header__dropdown-btn img,
+body[data-theme="dark"] .header__chevron,
+body[data-theme="dark"] .catalog-dropdown__chevron,
+body[data-theme="dark"] .booking-dropdown__chevron,
+body[data-theme="dark"] .admin-dropdown__chevron,
+body[data-theme="dark"] .review-star img {
   filter: invert(1);
 }
 
@@ -63,7 +68,6 @@ body[data-theme="dark"] .header__search {
   background: rgba(255, 255, 255, 0.08);
 }
 
-body[data-theme="dark"] .footer,
 body[data-theme="dark"] .offer-card,
 body[data-theme="dark"] .review-item,
 body[data-theme="dark"] .auth-modal__panel,
@@ -73,6 +77,24 @@ body[data-theme="dark"] .booking-modal__panel {
 
 body[data-theme="dark"] .offer-card {
   background: #0f0f0f;
+}
+
+body[data-theme="dark"] .header__dropdown-menu {
+  background: #141414;
+}
+
+body[data-theme="dark"] .catalog-dropdown__btn,
+body[data-theme="dark"] .admin-dropdown__btn,
+body[data-theme="dark"] .booking-dropdown__btn {
+  background: #2d2d2d;
+  border-color: var(--line);
+}
+
+body[data-theme="dark"] .catalog-dropdown__menu,
+body[data-theme="dark"] .admin-dropdown__menu,
+body[data-theme="dark"] .booking-dropdown__menu {
+  background: #141414;
+  border-color: var(--line);
 }
 
 body[data-theme="dark"] .mobile-menu__panel {
@@ -115,7 +137,60 @@ body[data-theme="dark"] .design__info {
   background: #2d2d2d;
 }
 
-body[data-theme="dark"] .design-card {
+body[data-theme="dark"] .design-card,
+body[data-theme="dark"] .salons-page__search-input {
   background: #2d2d2d;
 }
 
+body[data-theme="dark"] .salons-page__search-input::placeholder {
+  color: #9f9f9f;
+}
+
+body[data-theme="dark"] .auth-modal__tab,
+body[data-theme="dark"] .auth-form__btn,
+body[data-theme="dark"] .auth-field__input {
+  background: #2d2d2d;
+  border: none;
+}
+
+body[data-theme="dark"] .auth-modal__tab.is-active,
+body[data-theme="dark"] .orders-tab.is-active{
+  border: 1px solid #fff;
+}
+
+body[data-theme="dark"] .profile-btn,
+body[data-theme="dark"] .orders-tab {
+    background: #2d2d2d;
+    color: #fff;
+    border: none;
+}
+
+body[data-theme="dark"] .profile-item,
+body[data-theme="dark"] .cart-item {
+  background: #141414;
+  border: none;
+}
+
+body[data-theme="dark"] .profile-field__label,
+body[data-theme="dark"] .profile-address__text {
+  color: #fff;
+}
+
+
+body[data-theme="dark"] .faq-item__chev,
+body[data-theme="dark"] .profile-item__chev {
+    filter: invert(1);
+}
+
+body[data-theme="dark"] .cart-item__qty-btn {
+  background: #2d2d2d;
+}
+
+body[data-theme="dark"] .checkout-modal__panel {
+  background: #141414;
+  color: #fff;
+}
+
+body[data-theme="dark"] .booking-modal__close {
+  filter: invert(1);
+}

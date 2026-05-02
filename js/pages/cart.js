@@ -11,7 +11,6 @@ import {
   removeOfferFromCart,
   updateCartOfferQty,
 } from "../services/index.js";
-import { bindBookingModalTrigger, initBookingModal } from "../booking/bookingModal.js";
 import { mountLayout } from "../utils/layout.js";
 import { applySavedTheme, initThemeSelect } from "../utils/theme.js";
 
@@ -331,8 +330,6 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
 
   initAuthModal();
-  initBookingModal();
-  bindBookingModalTrigger({ selector: "#bookingAction" });
 
   initCartEvents();
   initCheckout();
